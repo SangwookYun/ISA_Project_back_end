@@ -15,7 +15,7 @@ app.use('/api/restaurant', menu)
 
 app.get('/', (req, res) => {
     res.writeHead(200, { "Content-Type": "text/html", "Access-Control-Allow-Origin": "*" });
-    res.send("Hello Jason!")
+    res.end("Hello Jason!")
 })
 
 app.listen(PORT, () => console.log("Listening..."))
