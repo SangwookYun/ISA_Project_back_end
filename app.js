@@ -23,7 +23,11 @@ let dbconfig = mysql.createConnection({
     database: process.env.DB_MENU
 })
 
+
 let con = mysql.createConnection(dbconfig);
+
+
+
 function handleConnectionError() {
     con = mysql.createConnection(dbconfig);
 
@@ -46,15 +50,21 @@ function handleConnectionError() {
 
 
 app.get('/', (req, res) => {
+    con.connect(function(err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
     var sql = "SELECT * FROM restaurant";
+    console.log(connection.state)
     con.query(sql, function(err, result) {
         if (err) {
-            handleConnectionError();
+            // handleConnectionError();
+            res.end("This is an error"+ err);
 
         }
-
         res.writeHead(200, { "Content-Type": "text/html", "Access-Control-Allow-Origin": "*" });
-        res.end(JSON.stringify(result));
+        res.send(result);
+        // res.end("Hello Jason")
     });
 })
 
