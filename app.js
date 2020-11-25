@@ -14,7 +14,7 @@ app.options('*', cors());
 app.use(cors());
 app.use('/api/menu', menu)
 app.use('/api/restaurant', restaurant)
-
+console.log(process.env.DB_USERNAME)
 let dbconfig = mysql.createConnection({
     host: process.env.CLEARDB_HOST,
     user: process.env.DB_USERNAME,
@@ -22,41 +22,17 @@ let dbconfig = mysql.createConnection({
     port: process.env.CLEARDB_PORT,
     database: process.env.DB_MENU
 })
-
-
 let con = mysql.createConnection(dbconfig);
 
 
-
-function handleConnectionError() {
-    con = mysql.createConnection(dbconfig);
-
-    con.connect(function(err) {
-        if (err) {
-            console.log('error when connecting to db:', err);
-            setTimeout(handleConnectionError, 1000);
-        }
-    });
-    con.on('error', function(err) {
-        console.log('db error', err);
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-            handleConnectionError();
-        } else {
-            throw err;
-        }
-    });
-}
-
-
-
 app.get('/', (req, res) => {
-    con.connect(function(err) {
+    dbconfig.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
   });
     var sql = "SELECT * FROM restaurant";
     console.log(connection.state)
-    con.query(sql, function(err, result) {
+    dbconfig.query(sql, function(err, result) {
         if (err) {
             // handleConnectionError();
             res.end("This is an error"+ err);
