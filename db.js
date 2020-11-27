@@ -1,5 +1,5 @@
 const mysql = require('mysql2')
-
+require('dotenv').config()
 let dbPool = mysql.createPool({
     host: process.env.CLEARDB_HOST,
     user: process.env.DB_USERNAME,
@@ -9,4 +9,4 @@ let dbPool = mysql.createPool({
 })
 
 
-module.export = dbPool.promise()
+module.exports = dbPool.promise();
