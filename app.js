@@ -7,6 +7,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3000
 const app = express()
 const mysql = require('mysql')
+require('dotenv').config();
 
 
 
@@ -16,26 +17,26 @@ app.use('/api/menu', menu)
 app.use('/api/restaurant', restaurant)
 console.log(process.env.DB_USERNAME)
 let dbconfig = mysql.createConnection({
-    host: process.env.CLEARDB_HOST,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.CLEARDB_PORT,
-    database: process.env.DB_MENU
-})
-let con = mysql.createConnection(dbconfig);
+        host: process.env.CLEARDB_HOST,
+        user: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.CLEARDB_PORT,
+        database: process.env.DB_NAME
+    })
+    // let con = mysql.createConnection(dbconfig);
 
 
 app.get('/', (req, res) => {
     dbconfig.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
+        if (err) throw err;
+        console.log("Connected!");
+    });
     var sql = "SELECT * FROM restaurant";
     console.log(connection.state)
     dbconfig.query(sql, function(err, result) {
         if (err) {
             // handleConnectionError();
-            res.end("This is an error"+ err);
+            res.end("This is an error" + err);
 
         }
         res.writeHead(200, { "Content-Type": "text/html", "Access-Control-Allow-Origin": "*" });
