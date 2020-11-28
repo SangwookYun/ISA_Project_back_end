@@ -1,5 +1,5 @@
 const express = require('express')
-const http = require('http')
+const path = require('path');
 const swaggerUI = require('swagger-ui-express')
 const menu = require('./routes/menu')
 const restaurant = require('./routes/restaurant')
@@ -7,6 +7,8 @@ const cors = require('cors');
 const PORT = process.env.PORT || 3000
 const app = express()
 const bodyParser = require('body-parser');
+const swaggerJSDoc = require('swagger-jsdoc')
+
 
 app.use(bodyParser.urlencoded({ extended: true })) // middleware
 
@@ -16,34 +18,41 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/menu', menu)
 app.use('/api/restaurant', restaurant)
+const options = {
+    definition: {
+        swagger: "2.0.0",
+        info: {
+            title: "Restaurant Express API with Swagger",
+            version: "1.0.0",
+            description: "A CRUD API for adding restaurant and menu items",
+            license: {
+                name: "MIT",
+                url: "https://spdx.org/licenses/MIT.html",
+            },
+            contact: {
+                name: "Jason and Yun",
+                email: "jasonwei0224@gmail.com",
+            },
+        },
+        servers: [{
+                url: "http://localhost:3000/api/",
+                description: "Development"
 
+            },
+            {
+                url: "https://api-jasonandyun.herokuapp.com/api/",
+                description: "live"
+            }
+        ],
+    },
+    apis: [path.resolve(__dirname, './routes/*.js')],
 
-// app.get('/restaurant', (req, res) => {
-//     res.writeHead(200, { "Content-Type": "text/html", "Access-Control-Allow-Origin": "*" });
-//     res.end("Hello!, jason!");
-// })
-
-// app.post('/', (req, res) => {
-//     let new_res_name = req.body['restaurant_name'];
-//     let sql = "SELECT * FROM restaurant WHERE restaurant =" + new_res_name;
-//     dbconfig.query(sql, function(err, result) {
-//         if (result == null || result == undefined) {
-//             console.log("No same restaurant")
-
-//         }
-//         dbconfig.query("SELECT COUNT(*) FROM restaurant", function(err, result) {
-//             let idx = JSON.parse(JSON.stringify(result))[0]
-//             let res_id = idx["COUNT(*)"] + 1;
-//             let add_query = 'INSERT INTO restaurant (restaurantid, restaurant_name, restaurant_phone, restaurant_addr, restaurant_desc) VALUES(' + res_id + ', "' + req.body['restaurant_name'] + '", "' + req.body['restaurant_phone'] + '", "' + req.body['restaurant_addr'] + '", "' + req.body['restaurant_desc'] + '")';
-//             dbconfig.query(add_query, function(err, result) {
-//                 if (err) {
-//                     return res.end("Error occurs");
-//                 }
-//                 res.end(JSON.stringify(result))
-//             })
-
-//         })
-//     })
-// })
+};
+const config = swaggerJSDoc(options)
+app.use(
+    "/api-docs",
+    swaggerUI.serve,
+    swaggerUI.setup(config)
+)
 
 app.listen(PORT, () => console.log("Listening..."))
