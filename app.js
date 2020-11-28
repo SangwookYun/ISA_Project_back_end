@@ -20,7 +20,7 @@ app.use('/api/menu', menu)
 app.use('/api/restaurant', restaurant)
 const options = {
     definition: {
-        swagger: "2.0.0",
+        openapi: "3.0.0",
         info: {
             title: "Restaurant Express API with Swagger",
             version: "1.0.0",
@@ -45,7 +45,7 @@ const options = {
             }
         ],
     },
-    apis: [path.resolve(__dirname, './routes/*.js')],
+    apis: ["ISA_PROJECT_BACKEND/routes/menu.js"],
 
 };
 const config = swaggerJSDoc(options)
