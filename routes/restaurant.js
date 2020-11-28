@@ -15,17 +15,23 @@ router.get('/:id', function(req, res, next) {
     })
 })
 router.post('/', function(req, res, next) {
-    console.log(req.body)
     let new_res_name = req.body['restaurant_name'];
-    result = resModel.getRestaurnatByName(new_res_name)
-    if (result == null || result == undefined) {
-        let count_query = resModel.countRestaurant()
-        countJSON = JSON.parse(JSON.stringify(count_query))[0]
-        let count = countJSON["COUNT(*)"] + 1;
-        resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc'])
-        res.status(200).json(data)
-    }
+    resModel.getRestaurantByName2(new_res_name).then((result)=> {
+        if (result[0].length ==0) {
+            let count_query = resModel.countRestaurant()
+            count_query.then((result2)=> {
+                countJSON = JSON.parse(JSON.stringify(result2))[0]
+                let count = (countJSON[0])["COUNT(*)"] + 1;
+                resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc'])
+                res.status(200).json(data)
+            })
+        }
+    }).catch(()=> {
+        console.log("failed")
+    })
 })
+
+
 router.post('/remove/:restaurantid', function(req, res, next) {})
 router.post('/modify/:restaurantid', function(req, res, next) {})
 
