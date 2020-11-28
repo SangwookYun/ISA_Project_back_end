@@ -4,23 +4,37 @@ const menuModel = require('../model/menuModel')
 
 /**
  * @swagger
- * path:
- *  /users/:
- *    post:
- *      summary: Create a new user
- *      tags: [Users]
- *      requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/User'
- *      responses:
- *        "200":
- *          description: A user schema
+ * /api/menu/:
+ *   post:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
  *          content:
- *            application/json:
- *    
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
  */
 router.post('/:restaurantid', function(req, res, next) {
     res_id = req.params['restaurantid']
@@ -36,6 +50,42 @@ router.post('/:restaurantid', function(req, res, next) {
         })
     })
 })
+
+/**
+ * @swagger
+ * /api/menu/:
+ *   get:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
+
 router.get('/:id', function(req, res, next) {
     res_id = req.params['id']
     result = menuModel.getMenu(res_id)
@@ -52,6 +102,41 @@ router.get('/:id', function(req, res, next) {
         res.status(500).json({ message: "fail to to get" })
     })
 })
+
+/**
+ * @swagger
+ * /api/menu/:
+ *   delete:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
 router.delete('/:restaurantid/:menuid', function(req, res, next) {
     res_id = req.params['restaurantid']
     menu_id = req.params['menuid']
@@ -62,6 +147,41 @@ router.delete('/:restaurantid/:menuid', function(req, res, next) {
         res.status(500).json({ message: "fail to delete" })
     })
 })
+
+/**
+ * @swagger
+ * /api/menu/:
+ *   put:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
 router.put('/:menuid', function(req, res, next) {
     menu_id = req.params['menuid']
     let item = req.body['menu_item']
