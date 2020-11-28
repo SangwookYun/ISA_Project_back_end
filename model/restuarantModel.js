@@ -19,12 +19,19 @@ function addRestaurant(id, name, phone, addr, desc) {
 }
 
 function updateRestaurant() {
+    return db.execute('UPDATE restaurant SET (restaurant_name, \
+        restaurant_phone, restaurant_addr, restaurant_desc) VALUES(' + name + '", "' + phone + '", "' + addr + '", "' + desc + '") WHERE restaurantid = ' + id)
+}
 
+function deleteRestaurant(id) {
+    return db.execute('DELETE FROM restaurant WHERE restaurantid = ' + id)
 }
 
 module.exports = {
     getRestaurant: getRestaurant,
     getRestaurnatByName: getRestaurnatByName,
     countRestaurant: countRestaurant,
-    addRestaurant: addRestaurant
+    addRestaurant: addRestaurant,
+    deleteRestaurant: deleteRestaurant,
+    updateRestaurant: updateRestaurant
 }
