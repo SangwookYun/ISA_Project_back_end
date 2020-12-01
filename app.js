@@ -1,6 +1,4 @@
 const express = require('express')
-const path = require('path');
-const swaggerUI = require('swagger-ui-express')
 const menu = require('./routes/menu')
 const restaurant = require('./routes/restaurant')
 const cors = require('cors');
@@ -8,7 +6,7 @@ const PORT = process.env.PORT || 3000
 const app = express()
 const bodyParser = require('body-parser');
 const swaggerJSDoc = require('swagger-jsdoc')
-
+const swaggerUI = require('swagger-ui-express')
 
 app.use(bodyParser.urlencoded({ extended: true })) // middleware
 
@@ -19,7 +17,7 @@ app.use(express.json());
 app.use('/api/menu', menu)
 app.use('/api/restaurant', restaurant)
 const options = {
-    definition: {
+    swaggerDefinition: {
         openapi: "3.0.0",
         info: {
             title: "Restaurant Express API with Swagger",
@@ -35,17 +33,17 @@ const options = {
             },
         },
         servers: [{
-                url: "http://localhost:3000/api/",
+                url: "http://localhost:3000",
                 description: "Development"
 
             },
             {
-                url: "https://api-jasonandyun.herokuapp.com/api/",
+                url: "https://api-jasonandyun.herokuapp.com",
                 description: "live"
             }
         ],
     },
-    apis: ["ISA_PROJECT_BACKEND/routes/menu.js"],
+    apis: ["./routes/menu.js", "./routes/restaurant.js"],
 
 };
 const config = swaggerJSDoc(options)
