@@ -5,9 +5,10 @@ const resModel = require('../model/restuarantModel')
 
 
 router.get('/:id', function(req, res, next) {
+    console.log(req)
     res_id = req.params['id']
     result = resModel.getRestaurant(res_id)
-
+    
     result.then(([data, meta]) => {
         // console.log(result)
         console.log(data)
