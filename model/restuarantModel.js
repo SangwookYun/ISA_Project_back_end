@@ -6,6 +6,12 @@ let getRestaurant = (id) => {
     });
 }
 
+let getRestaurant_top_3 = (id) => {
+    return new Promise((resolve, reject) => {
+        resolve(db.execute("SELECT * FROM restaurant WHERE restaurantid = " + id));
+    });
+}
+
 
 let getRestaurantByName = (name) => {
     return new Promise((resolve, reject) => {
@@ -39,6 +45,7 @@ function deleteRestaurant(id) {
 
 module.exports = {
     getRestaurant: getRestaurant,
+    getRestaurant_top_3: getRestaurant_top_3,
     getRestaurantByName: getRestaurantByName,
     countRestaurant: countRestaurant,
     addRestaurant: addRestaurant,

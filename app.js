@@ -7,6 +7,7 @@ const app = express()
 const bodyParser = require('body-parser');
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
+const resModel = require('./model/restuarantModel')
 
 app.use(bodyParser.urlencoded({ extended: true })) // middleware
 
@@ -52,5 +53,19 @@ app.use(
     swaggerUI.serve,
     swaggerUI.setup(config)
 )
+app.get('/', (req, res)=> {
+    console.log(req.body);
+    let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
+    console.log(result);
+
+    result.then(([data, meta]) => {
+        // console.log(result)
+        console.log(data)
+        res.status(200).json(data)
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    });
+})
+
 
 app.listen(PORT, () => console.log("Listening..."))
