@@ -40,10 +40,9 @@ const resModel = require('../model/restuarantModel')
  *       - Secured: []
  */
 router.get('/:id', function(req, res, next) {
-    console.log(req)
+    // console.log(req)
     res_id = req.params['id']
     result = resModel.getRestaurant(res_id)
-    
     result.then(([data, meta]) => {
         // console.log(result)
         console.log(data)
@@ -97,8 +96,12 @@ router.post('/', function(req, res, next) {
             count_query.then((result2) => {
                 countJSON = JSON.parse(JSON.stringify(result2))[0]
                 let count = (countJSON[0])["COUNT(*)"] + 1;
-                resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc'])
-                res.status(200).json(data)
+                resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2)=> {
+                    res.status(200).json(result2)
+                }).catch(()=> {
+                    console.log("failed")
+                });
+                
             })
         }
     }).catch(() => {
@@ -143,6 +146,7 @@ router.post('/', function(req, res, next) {
  *       - Secured: []
  */
 router.delete('/:id', function(req, res, next) {
+    console.log("Working? delete?")
     let res_id = req.params['id']
     result = resModel.deleteRestaurant(res_id)
     res.status(200).json(result)
@@ -191,5 +195,18 @@ router.put('/:id', function(req, res, next) {
 
 })
 
+
+
+router.get('/del/all', function(req, res, next) {
+  
+       let result = resModel.getRestaurantAll()
+    console.log(result);
+   result.then(([data,meta])=> {
+        console.log(data);
+        res.status(200).json(data);
+    }).catch(()=> {
+        res.status(500).json({message:"fail to get"})
+    })
+})
 
 module.exports = router;

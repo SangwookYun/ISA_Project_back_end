@@ -1,4 +1,6 @@
+const { json } = require('body-parser');
 const express = require('express');
+const { getMenu } = require('../model/menuModel');
 const router = express.Router();
 const menuModel = require('../model/menuModel')
 
@@ -37,18 +39,41 @@ const menuModel = require('../model/menuModel')
  *       - Secured: []
  */
 router.post('/:restaurantid', function(req, res, next) {
-    res_id = req.params['restaurantid']
-    count = menuModel.countItems(res_id)
+    console.log("int here?")
+    console.log(req.body)
+    count = menuModel.countItems()
+    
     count.then((result) => {
-        countJSON = JSON.parse(JSON.stringify(result))[0]
-        let count = (countJSON[0])["COUNT(*)"] + 1
-        item = menuModel.addMenuItem(count, res_id, item)
-        item.then(([data, meta]) => {
-            res.status(200).json({ message: "successfully added" })
-        }).catch(() => {
-            res.status(500).json({ message: "fail to add" })
-        })
+        let result_count = result[0];  
+        result_count  = JSON.parse(JSON.stringify(result_count))[0]
+        console.log(result_count)
+        let new_idx = (result_count)["COUNT(*)"] + 1;
+        console.log(new_idx);
+        
+        menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc'])
+        res.status(200).json("done")
     })
+})
+
+
+
+router.get('/del/all/:id', function(req, res, next) {
+    let getMenu = menuModel.getMenu(req.params['id'])
+    getMenu.then((result)=> {
+        let curMenu = JSON.parse(JSON.stringify(result))[0];
+        console.log(curMenu);
+        res.status(200).json(curMenu);
+    })
+
+    
+    // let result = resModel.getRestaurantAll()
+    // console.log(result);
+    // result.then(([data,meta])=> {
+    //     console.log(data);
+    //     res.status(200).json(data);
+    // }).catch(()=> {
+    //     res.status(500).json({message:"fail to get"})
+    // })
 })
 
 /**
@@ -137,10 +162,9 @@ router.get('/:id', function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.delete('/:restaurantid/:menuid', function(req, res, next) {
-    res_id = req.params['restaurantid']
+router.delete('/:menuid', function(req, res, next) {
     menu_id = req.params['menuid']
-    result = menuModel.deleteMenu(res_id, menuid)
+    result = menuModel.deleteMenu(menu_id)
     result.then(([data, meta]) => {
         res.status(200).json(data)
     }).catch(() => {

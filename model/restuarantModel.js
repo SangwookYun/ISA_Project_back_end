@@ -1,5 +1,11 @@
 const db = require('../db')
 
+let getRestaurantAll = () => {
+    return new Promise((resolve, reject)=> {
+        resolve(db.execute("SELECT *FROM restaurant"));
+    });
+}
+
 let getRestaurant = (id) => {
     return new Promise((resolve, reject) => {
         resolve(db.execute("SELECT * FROM restaurant WHERE restaurantid = '" + id + "'"));
@@ -44,6 +50,7 @@ function deleteRestaurant(id) {
 
 
 module.exports = {
+    getRestaurantAll: getRestaurantAll,
     getRestaurant: getRestaurant,
     getRestaurant_top_3: getRestaurant_top_3,
     getRestaurantByName: getRestaurantByName,
