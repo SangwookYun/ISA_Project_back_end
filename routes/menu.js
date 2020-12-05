@@ -38,7 +38,7 @@ const menuModel = require('../model/menuModel')
  *     security:
  *       - Secured: []
  */
-router.post('/:restaurantid', function(req, res, next) {
+router.post('/:restaurantid', function(req, res, next) { //used
     console.log("int here?")
     console.log(req.body)
     count = menuModel.countItems()
@@ -139,7 +139,7 @@ router.get('/all/:restaurantid', function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.delete('/:menuid', function(req, res, next) {
+router.delete('/:menuid', function(req, res, next) { //used
     menu_id = req.params['menuid']
     result = menuModel.deleteMenu(menu_id)
     result.then(([data, meta]) => {

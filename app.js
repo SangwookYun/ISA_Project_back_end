@@ -16,9 +16,9 @@ app.use(bodyParser.json()) // middleware
 app.options('*', cors());
 app.use(cors());
 app.use(express.json());
-app.use('/api/menu', menu)
-app.use('/api/restaurant', restaurant)
-app.use('/api/user', user)
+app.use('/api/v1/menu', menu)
+app.use('/api/v1/restaurant', restaurant)
+app.use('/api/v1/user', user)
 const options = {
     swaggerDefinition: {
         openapi: "3.0.0",
@@ -46,12 +46,12 @@ const options = {
             }
         ],
     },
-    apis: ["./routes/menu.js", "./routes/restaurant.js", "app.js"],
+    apis: ["./routes/menu.js", "./routes/restaurant.js", "app.js", "./routes/user.js"],
 
 };
 const config = swaggerJSDoc(options)
 app.use(
-        "/api-docs",
+        "/docs",
         swaggerUI.serve,
         swaggerUI.setup(config)
     )
@@ -91,7 +91,7 @@ app.use(
      *     security:
      *       - Secured: []
      */
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { //used
     console.log(req.body);
     let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
     console.log(result);
