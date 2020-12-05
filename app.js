@@ -44,7 +44,7 @@ const options = {
             }
         ],
     },
-    apis: ["./routes/menu.js", "./routes/restaurant.js"],
+    apis: ["./routes/menu.js", "./routes/restaurant.js", "./app.js"],
 
 };
 const config = swaggerJSDoc(options)
@@ -53,7 +53,42 @@ app.use(
     swaggerUI.serve,
     swaggerUI.setup(config)
 )
-app.get('/', (req, res)=> {
+
+/**
+ * @swagger
+ * /api/menu/:
+ *   post:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
+app.get('/', (req, res) => {
     console.log(req.body);
     let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
     console.log(result);

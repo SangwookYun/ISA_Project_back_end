@@ -197,6 +197,40 @@ router.put('/:id', function(req, res, next) {
 
 
 
+/**
+ * @swagger
+ * /api/menu/:
+ *   post:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
 router.get('/all', function(req, res, next) {
 
     let result = resModel.getRestaurantAll()
@@ -209,6 +243,40 @@ router.get('/all', function(req, res, next) {
     })
 })
 
+/**
+ * @swagger
+ * /api/menu/:
+ *   post:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
 router.post('/pic/:id', function(req, res, next) {
     let res_id = req.params['id']
     let url = req.body['url'];
@@ -220,6 +288,40 @@ router.post('/pic/:id', function(req, res, next) {
     })
 })
 
+/**
+ * @swagger
+ * /api/menu/:
+ *   post:
+ *     tags:
+ *       - Menu
+ *     description: Add a restaurant to DB
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to add 
+ *       default:
+ *         description: Fail to add
+ *     security:
+ *       - Secured: []
+ */
 router.get('/pic/:id', function(req, res, next) {
     let res_id = req.params['id']
     let result = resModel.getResPic(res_id)
