@@ -1,5 +1,6 @@
 const express = require('express')
 const menu = require('./routes/menu')
+const user = require('./routes/user')
 const restaurant = require('./routes/restaurant')
 const cors = require('cors');
 const PORT = process.env.PORT || 3000
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/menu', menu)
 app.use('/api/restaurant', restaurant)
+app.use('/api/user', user)
 const options = {
     swaggerDefinition: {
         openapi: "3.0.0",
