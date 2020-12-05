@@ -5,37 +5,28 @@ const resModel = require('../model/restuarantModel')
 
 /**
  * @swagger
- * /api/restaurant/:
+ * /api/restaurant/:id:
  *   get:
  *     tags:
  *       - Restaurant
- *     description: Endpoint to accept a Friend Invite
+ *     description: get restaurant
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: key
+ *       - name: id
  *         in: query
  *         require: false
  *         type: string
- *         example: AIzaSyBaCfu1kM4SzuLhiRsu6Th6LfKl2lSuDHI
- *       - in: body
- *         name: body
- *         required: false
- *         schema:
- *           $ref: []
- *         examples:
- *         application/json:  "{\n\t\"email\":\"john@example.com\"\n}"
+ *         example: 1
  *     responses:
  *       '201':
- *         description: Your friend has been added, congratulations on a new friend :)
+ *         description:  OK
  *         content:
  *           application/json; charset=utf-8:
- *         schema:
- *           $ref: '#/definitions/Model7'
  *       default:
- *         description: Unexpected Error
+ *         description: Fail to get
  *     security:
  *       - Secured: []
  */
@@ -58,31 +49,16 @@ router.get('/:id', function(req, res, next) {
  *   post:
  *     tags:
  *       - Restaurant
- *     description: Endpoint to accept a Friend Invite
+ *     description: add restauratn
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: key
- *         in: query
- *         require: false
- *         type: string
- *         example: AIzaSyBaCfu1kM4SzuLhiRsu6Th6LfKl2lSuDHI
- *       - in: body
- *         name: body
- *         required: false
- *         schema:
- *           $ref: []
- *         examples:
- *         application/json:  "{\n\t\"email\":\"john@example.com\"\n}"
  *     responses:
  *       '201':
- *         description: Your friend has been added, congratulations on a new friend :)
+ *         description: OK
  *         content:
  *           application/json; charset=utf-8:
- *         schema:
- *           $ref: '#/definitions/Model7'
  *       default:
  *         description: Unexpected Error
  *     security:
@@ -111,35 +87,24 @@ router.post('/', function(req, res, next) {
 
 /**
  * @swagger
- * /api/restaurant/:
+ * /api/restaurant/:id:
  *   delete:
  *     tags:
  *       - Restaurant
- *     description: Endpoint to accept a Friend Invite
+ *     description: delete a restuarant
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: key
+ *       - name: id
  *         in: query
  *         require: false
  *         type: string
- *         example: AIzaSyBaCfu1kM4SzuLhiRsu6Th6LfKl2lSuDHI
- *       - in: body
- *         name: body
- *         required: false
- *         schema:
- *           $ref: []
- *         examples:
- *         application/json:  "{\n\t\"email\":\"john@example.com\"\n}"
+ *         example: 2
  *     responses:
  *       '201':
- *         description: Your friend has been added, congratulations on a new friend :)
- *         content:
- *           application/json; charset=utf-8:
- *         schema:
- *           $ref: '#/definitions/Model7'
+ *         description: OK
  *       default:
  *         description: Unexpected Error
  *     security:
@@ -154,35 +119,28 @@ router.delete('/:id', function(req, res, next) {
 
 /**
  * @swagger
- * /api/restaurant/:
+ * /api/restaurant/:id:
  *   put:
  *     tags:
  *       - Restaurant
- *     description: Endpoint to accept a Friend Invite
+ *     description: Update restaurant
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: key
- *         in: query
- *         require: false
- *         type: string
- *         example: AIzaSyBaCfu1kM4SzuLhiRsu6Th6LfKl2lSuDHI
- *       - in: body
- *         name: body
+ *       - in: query
+ *         name: id
  *         required: false
  *         schema:
  *           $ref: []
  *         examples:
- *         application/json:  "{\n\t\"email\":\"john@example.com\"\n}"
+ *         application/json: 1
  *     responses:
  *       '201':
- *         description: Your friend has been added, congratulations on a new friend :)
- *         content:
- *           application/json; charset=utf-8:
- *         schema:
- *           $ref: '#/definitions/Model7'
+ *         description: Success
+ *       500:
+ *          description: Unable to update
  *       default:
  *         description: Unexpected Error
  *     security:
@@ -199,21 +157,15 @@ router.put('/:id', function(req, res, next) {
 
 /**
  * @swagger
- * /api/menu/:
- *   post:
+ * /api/all/:
+ *   get:
  *     tags:
- *       - Menu
- *     description: Add a restaurant to DB
+ *       - Restaurant
+ *     description: Get all restaurant
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: id
- *         in: query
- *         require: true
- *         type: string
- *         example: 1
  *     responses:
  *       200:
  *          description: OK
@@ -245,11 +197,11 @@ router.get('/all', function(req, res, next) {
 
 /**
  * @swagger
- * /api/menu/:
+ * /api/restaurant/pic/:id:
  *   post:
  *     tags:
- *       - Menu
- *     description: Add a restaurant to DB
+ *       - Restaurant
+ *     description: Add a restaurant picture to DB
  *     consumes:
  *       - application/json
  *     produces:
@@ -262,7 +214,7 @@ router.get('/all', function(req, res, next) {
  *         example: 1
  *     responses:
  *       200:
- *          description: OK
+ *          description: Success
  *          content:
  *             application/json:
  *              schema:
@@ -290,11 +242,11 @@ router.post('/pic/:id', function(req, res, next) {
 
 /**
  * @swagger
- * /api/menu/:
- *   post:
+ * /api/restaurant/pic/:id:
+ *   get:
  *     tags:
- *       - Menu
- *     description: Add a restaurant to DB
+ *       - Restaurant
+ *     description: Get restaurant picture
  *     consumes:
  *       - application/json
  *     produces:

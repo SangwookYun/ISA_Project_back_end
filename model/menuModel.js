@@ -6,10 +6,10 @@ function getMenu(id) {
     })
 }
 
-function updateMenu(id, item) {
+function updateMenu(id, restid, item, amount, desc) { // Need update
     return new Promise((resolve, reject) => {
-        resolve(db.execute(
-            'UPDATE menu (item) VALUES (' + item + '") WHERE menuid = ' + id))
+        resolve(db.execute('UPDATE menu (menuid, restaurantid, items, menudescription, menuprice) VALUES (' +
+            id + "," + restid + ',"' + item + '","' + desc + '","' + amount + '")'))
     })
 }
 
@@ -27,10 +27,8 @@ function countItems() {
 
 function addMenuItem(id, restid, item, amount, desc) {
     return new Promise((resolve, reject) => {
-        console.log('INSERT INTO menu (menuid, restaurantid, items, menudescription, menuprice) VALUES (' +
-        id + "," + restid + ",'" + item + '","' + desc +'","' + amount+'")')
         resolve(db.execute('INSERT INTO menu (menuid, restaurantid, items, menudescription, menuprice) VALUES (' +
-            id + "," + restid + ',"' + item + '","' + desc +'","' + amount+'")'))
+            id + "," + restid + ',"' + item + '","' + desc + '","' + amount + '")'))
     })
 }
 

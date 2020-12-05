@@ -6,7 +6,7 @@ const menuModel = require('../model/menuModel')
 
 /**
  * @swagger
- * /api/menu/:
+ * /api/menu/:restaurantid:
  *   post:
  *     tags:
  *       - Menu
@@ -29,7 +29,7 @@ const menuModel = require('../model/menuModel')
  *              schema:
  *                  type: object
  *                  properties:
- *                      message:
+ *                      message: 
  *                          type: String 
  *       400:
  *          description: Fail to add 
@@ -56,91 +56,68 @@ router.post('/:restaurantid', function(req, res, next) {
 })
 
 
-
-router.get('/del/all/:id', function(req, res, next) {
-    let getMenu = menuModel.getMenu(req.params['id'])
+/**
+ * @swagger
+ * /api/menu/all/:restaurantid:
+ *   get:
+ *     tags:
+ *       - Menu
+ *     description: Get all menu items of a restaurant
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: restaurantid
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *     responses:
+ *       200:
+ *          description: OK
+ *          content:
+ *             application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      message:
+ *                          type: String 
+ *       400:
+ *          description: Fail to Get  
+ *       default:
+ *         description: Fail to Get
+ *     security:
+ *       - Secured: []
+ */
+router.get('/all/:restaurantid', function(req, res, next) {
+    // Need to update
+    let getMenu = menuModel.getMenu(req.params['restaurantid'])
     getMenu.then((result) => {
         let curMenu = JSON.parse(JSON.stringify(result))[0];
         console.log(curMenu);
         res.status(200).json(curMenu);
-    })
-
-
-    // let result = resModel.getRestaurantAll()
-    // console.log(result);
-    // result.then(([data,meta])=> {
-    //     console.log(data);
-    //     res.status(200).json(data);
-    // }).catch(()=> {
-    //     res.status(500).json({message:"fail to get"})
-    // })
-})
-
-/**
- * @swagger
- * /api/menu/:
- *   get:
- *     tags:
- *       - Menu
- *     description: Add a restaurant to DB
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         in: query
- *         require: true
- *         type: string
- *         example: 1
- *     responses:
- *       200:
- *          description: OK
- *          content:
- *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
- *       400:
- *          description: Fail to add 
- *       default:
- *         description: Fail to add
- *     security:
- *       - Secured: []
- */
-
-router.get('/:id', function(req, res, next) {
-    res_id = req.params['id']
-    result = menuModel.getMenu(res_id)
-    result.then(([data, meta]) => {
-        if (data == {}) {
-            res.status(401).json({ message: "not found" })
-        } else {
-            // console.log(result)
-            // console.log(data)
-            res.status(200).json(data)
-        }
-
     }).catch(() => {
-        res.status(500).json({ message: "fail to to get" })
+        res.status(500).json({ message: "fail to get" })
     })
+
 })
+
+
 
 /**
  * @swagger
- * /api/menu/:
+ * /api/menu/:menuid:
  *   delete:
  *     tags:
  *       - Menu
- *     description: Add a restaurant to DB
+ *     description: Delete a menu item from database
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: id
+ *       - name: menuid
  *         in: query
  *         require: true
  *         type: string
@@ -155,10 +132,10 @@ router.get('/:id', function(req, res, next) {
  *                  properties:
  *                      message:
  *                          type: String 
- *       400:
- *          description: Fail to add 
+ *       500:
+ *          description: Fail to delete 
  *       default:
- *         description: Fail to add
+ *         description: Fail to delete
  *     security:
  *       - Secured: []
  */
@@ -174,17 +151,17 @@ router.delete('/:menuid', function(req, res, next) {
 
 /**
  * @swagger
- * /api/menu/:
+ * /api/menu/:menuid:
  *   put:
  *     tags:
  *       - Menu
- *     description: Add a restaurant to DB
+ *     description: Update a menu item
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: id
+ *       - name: menuid
  *         in: query
  *         require: true
  *         type: string
