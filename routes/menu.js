@@ -42,14 +42,14 @@ router.post('/:restaurantid', function(req, res, next) {
     console.log("int here?")
     console.log(req.body)
     count = menuModel.countItems()
-    
+
     count.then((result) => {
-        let result_count = result[0];  
-        result_count  = JSON.parse(JSON.stringify(result_count))[0]
+        let result_count = result[0];
+        result_count = JSON.parse(JSON.stringify(result_count))[0]
         console.log(result_count)
         let new_idx = (result_count)["COUNT(*)"] + 1;
         console.log(new_idx);
-        
+
         menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc'])
         res.status(200).json("done")
     })
@@ -59,13 +59,13 @@ router.post('/:restaurantid', function(req, res, next) {
 
 router.get('/del/all/:id', function(req, res, next) {
     let getMenu = menuModel.getMenu(req.params['id'])
-    getMenu.then((result)=> {
+    getMenu.then((result) => {
         let curMenu = JSON.parse(JSON.stringify(result))[0];
         console.log(curMenu);
         res.status(200).json(curMenu);
     })
 
-    
+
     // let result = resModel.getRestaurantAll()
     // console.log(result);
     // result.then(([data,meta])=> {
@@ -217,9 +217,5 @@ router.put('/:menuid', function(req, res, next) {
     })
 })
 
-router.post('/picture/:menuid', function(req, res, next) {})
-router.delete('/picture/:menuid', function(req, res, next) {})
-router.get('/picture/:menuid', function(req, res, next) {})
-router.put('/modifypicture/:menuid', function(req, res, next) {})
 
 module.exports = router;

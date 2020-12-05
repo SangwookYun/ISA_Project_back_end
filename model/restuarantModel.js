@@ -1,7 +1,8 @@
-const db = require('../db')
+const db = require('../db');
+const { get } = require('../routes/menu');
 
 let getRestaurantAll = () => {
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
         resolve(db.execute("SELECT *FROM restaurant"));
     });
 }
@@ -38,7 +39,7 @@ let addRestaurant = (id, name, phone, addr, desc) => {
     })
 }
 
-function updateRestaurant() {
+function updateRestaurant(id, name, phone, addr, desc) {
     return db.execute('UPDATE restaurant SET (restaurant_name, \
         restaurant_phone, restaurant_addr, restaurant_desc) VALUES(' + name + '", "' + phone + '", "' + addr + '", "' + desc +
         '") WHERE restaurantid = ' + id)
@@ -47,6 +48,19 @@ function updateRestaurant() {
 function deleteRestaurant(id) {
     return db.execute('DELETE FROM restaurant WHERE restaurantid = ' + id)
 }
+
+function updateResPic(id, url) {
+    return new Promise((resolve, reject) => {
+        resolve(('UPDATE restaurant SET (restaurant_pic) VALUES(' + url + '") WHERE restaurantid = ' + id))
+    })
+}
+
+function getResPic(id) {
+    return new Promise((resolve, reject) => {
+        resolve(("SELECT restaurant_pic FROM restaurant WHERE restaurantid = " + id))
+    })
+}
+
 
 
 module.exports = {
@@ -57,5 +71,7 @@ module.exports = {
     countRestaurant: countRestaurant,
     addRestaurant: addRestaurant,
     deleteRestaurant: deleteRestaurant,
-    updateRestaurant: updateRestaurant
+    updateRestaurant: updateRestaurant,
+    getResPic: getResPic,
+    updateResPic: updateResPic
 }
