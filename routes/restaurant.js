@@ -96,12 +96,12 @@ router.post('/', function(req, res, next) {
             count_query.then((result2) => {
                 countJSON = JSON.parse(JSON.stringify(result2))[0]
                 let count = (countJSON[0])["COUNT(*)"] + 1;
-                resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2)=> {
+                resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2) => {
                     res.status(200).json(result2)
-                }).catch(()=> {
+                }).catch(() => {
                     console.log("failed")
                 });
-                
+
             })
         }
     }).catch(() => {
@@ -197,16 +197,39 @@ router.put('/:id', function(req, res, next) {
 
 
 
-router.get('/del/all', function(req, res, next) {
-  
-       let result = resModel.getRestaurantAll()
+router.get('/all', function(req, res, next) {
+
+    let result = resModel.getRestaurantAll()
     console.log(result);
-   result.then(([data,meta])=> {
+    result.then(([data, meta]) => {
         console.log(data);
         res.status(200).json(data);
-    }).catch(()=> {
-        res.status(500).json({message:"fail to get"})
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
     })
+})
+
+router.post('/pic/:id', function(req, res, next) {
+    let res_id = req.params['id']
+    let url = req.body['url'];
+    let result = resModel.updateResPic(res_id, url)
+    result.then(([data, meta]) => {
+        res.status(200).json({ message: "success" });
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    })
+})
+
+router.get('/pic/:id', function(req, res, next) {
+    let res_id = req.params['id']
+    let result = resModel.getResPic(res_id)
+    result.then(([data, meta]) => {
+        // console.log(result)
+        console.log(data)
+        res.status(200).json(data)
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get picture" })
+    });
 })
 
 module.exports = router;
