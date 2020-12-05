@@ -4,7 +4,28 @@ const { getMenu } = require('../model/menuModel');
 const router = express.Router();
 const userModel = require('../model/userModel')
 
-router.get('/:userid&:userpassword', function(req, res, next) {
+/**
+ * @swagger
+ * /api/:userid&:userpassword:
+ *   post:
+ *     tags:
+ *       - SignUP
+ *     description: add restauratn
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       '201':
+ *         description: OK
+ *         content:
+ *           application/json; charset=utf-8:
+ *       default:
+ *         description: Unexpected Error
+ *     security:
+ *       - Secured: []
+ */
+router.get('/:userid&:userpassword', function(req, res, next) { // used
     console.log(req.params)
     id = req.params['userid']
     console.log(req.params['userpassword'])
@@ -13,49 +34,89 @@ router.get('/:userid&:userpassword', function(req, res, next) {
         console.log(data)
         let id_pwd = JSON.parse(JSON.stringify(data))[0];
         console.log(id_pwd)
-        if(id_pwd['password']==req.params['userpassword']) {
-            
+        if (id_pwd['password'] == req.params['userpassword']) {
+
             res.status(200).json(data)
-        }else {
+        } else {
             res.end('password wrong')
         }
     }).catch(() => {
         console.log("error occurs")
     });
 });
-router.get('/signup/:userid', function(req, res, next) {
+/**
+ * @swagger
+ * /api/signup/:userid:
+ *   post:
+ *     tags:
+ *       - SignUP
+ *     description: add restauratn
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       '201':
+ *         description: OK
+ *         content:
+ *           application/json; charset=utf-8:
+ *       default:
+ *         description: Unexpected Error
+ *     security:
+ *       - Secured: []
+ */
+router.get('/signup/:userid', function(req, res, next) { // used
     console.log(req.params)
     id = req.params['userid']
     result = userModel.getUser(id)
     result.then(([data, meta]) => {
         console.log(data)
-        if((JSON.parse(JSON.stringify(data)).length)!=0) {
+        if ((JSON.parse(JSON.stringify(data)).length) != 0) {
             res.status(200).json(true);
-        }else {
+        } else {
             res.status(200).json(false)
         }
-        
+
     }).catch(() => {
         console.log("error occurs")
     });
 });
-router.post('/new/signup', function(req, res, next) {
+/**
+ * @swagger
+ * /api/new/signup:
+ *   post:
+ *     tags:
+ *       - SignUP
+ *     description: add restauratn
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       '201':
+ *         description: OK
+ *         content:
+ *           application/json; charset=utf-8:
+ *       default:
+ *         description: Unexpected Error
+ *     security:
+ *       - Secured: []
+ */
+router.post('/new/signup', function(req, res, next) { // used
     console.log(req.body)
-    
+
     result = userModel.addUser(req.body['new_id'], req.body['new_password'])
     result.then(([data, meta]) => {
-       console.log(data)
+        console.log(data)
         res.status(200).json(data)
-        
+
     }).catch(() => {
         console.log("error occurs")
     });
-    
+
 });
 
 
 
 
 module.exports = router;
-
-
