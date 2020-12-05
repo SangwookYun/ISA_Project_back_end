@@ -44,16 +44,52 @@ const options = {
             }
         ],
     },
-    apis: ["./routes/menu.js", "./routes/restaurant.js"],
+    apis: ["./routes/menu.js", "./routes/restaurant.js", "app.js"],
 
 };
 const config = swaggerJSDoc(options)
 app.use(
-    "/api-docs",
-    swaggerUI.serve,
-    swaggerUI.setup(config)
-)
-app.get('/', (req, res)=> {
+        "/api-docs",
+        swaggerUI.serve,
+        swaggerUI.setup(config)
+    )
+    /**
+     * @swagger
+     * /api/:
+     *   get:
+     *     tags:
+     *       - home
+     *     description: Endpoint to accept a Friend Invite
+     *     consumes:
+     *       - application/json
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: key
+     *         in: query
+     *         require: false
+     *         type: string
+     *         example: AIzaSyBaCfu1kM4SzuLhiRsu6Th6LfKl2lSuDHI
+     *       - in: body
+     *         name: body
+     *         required: false
+     *         schema:
+     *           $ref: []
+     *         examples:
+     *         application/json:  "{\n\t\"email\":\"john@example.com\"\n}"
+     *     responses:
+     *       '201':
+     *         description: Your friend has been added, congratulations on a new friend :)
+     *         content:
+     *           application/json; charset=utf-8:
+     *         schema:
+     *           $ref: '#/definitions/Model7'
+     *       default:
+     *         description: Unexpected Error
+     *     security:
+     *       - Secured: []
+     */
+app.get('/', (req, res) => {
     console.log(req.body);
     let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
     console.log(result);
