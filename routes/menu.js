@@ -3,42 +3,42 @@ const express = require('express');
 const { getMenu } = require('../model/menuModel');
 const router = express.Router();
 const menuModel = require('../model/menuModel')
-
-/**
- * @swagger
- * /menu/rest/:restaurantid:
- *   post:
- *     tags:
- *       - Menu
- *     description: Add a restaurant to DB
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         in: query
- *         require: true
- *         type: string
- *         example: 1
- *     responses:
- *       200:
- *          description: OK
- *          content:
- *             application/json:
- *              example:
- *                  [
- *                   {
- *                      message: Success
- *                   }
- *               ]
- *       400:
- *          description: Fail to add 
- *       default:
- *         description: Fail to add
- *     security:
- *       - Secured: []
- */
+let jwt = require('jsonwebtoken')
+    /**
+     * @swagger
+     * /menu/rest/:restaurantid:
+     *   post:
+     *     tags:
+     *       - Menu
+     *     description: Add a restaurant to DB
+     *     consumes:
+     *       - application/json
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: id
+     *         in: query
+     *         require: true
+     *         type: string
+     *         example: 1
+     *     responses:
+     *       200:
+     *          description: OK
+     *          content:
+     *             application/json:
+     *              example:
+     *                  [
+     *                   {
+     *                      message: Success
+     *                   }
+     *               ]
+     *       400:
+     *          description: Fail to add 
+     *       default:
+     *         description: Fail to add
+     *     security:
+     *       - Secured: []
+     */
 router.post('/rest/:restaurantid', function(req, res, next) { //used // Need update
     console.log("int here?")
     console.log(req.body)
@@ -48,11 +48,10 @@ router.post('/rest/:restaurantid', function(req, res, next) { //used // Need upd
         let result_count = result[0];
         result_count = JSON.parse(JSON.stringify(result_count))[0]
         console.log(result_count)
-        let new_idx = (result_count)["COUNT(*)"] + 2;
+        let new_idx = (result_count)["COUNT(*)"] + 3;
         console.log(new_idx);
 
-        menu = menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc'])
-        menu.then((result) => {
+        menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc']).then((result) => {
             console.log('success')
             res.status(200).json({ message: "success" })
         }).catch(() => {
@@ -170,13 +169,22 @@ router.get('/all/:restaurantid', function(req, res, next) {
  *       - Secured: []
  */
 router.delete('/:menuid', function(req, res, next) { //used
-    menu_id = req.params['menuid']
-    result = menuModel.deleteMenu(menu_id)
-    result.then(([data, meta]) => {
-        res.status(200).json({ message: "success" })
-    }).catch(() => {
-        res.status(500).json({ message: "fail to delete" })
-    })
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            if (err) {
+                console.log("error?")
+                return res.status(401).json({ message: 'Unauthroized user' });
+            } else {
+                menu_id = req.params['menuid']
+                result = menuModel.deleteMenu(menu_id)
+                result.then(([data, meta]) => {
+                    res.status(200).json({ message: "success" })
+                }).catch(() => {
+                    res.status(500).json({ message: "fail to delete" })
+                })
+            }
+        })
+    }
 })
 
 /**
