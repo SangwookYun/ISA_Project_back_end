@@ -27,8 +27,11 @@ function countItems() {
 
 function addMenuItem(id, restid, item, amount, desc) {
     console.log(id, restid, item, amount, desc)
-    return db.execute('INSERT INTO menu (menuid, restaurantid, items, menudescription, menuprice) VALUES (' +
-        id + "," + restid + ',"' + item + '","' + desc + '","' + amount + '")')
+    return new Promise((resolve, reject) => {
+
+        resolve(db.execute('INSERT INTO menu (menuid, restaurantid, items, menudescription, menuprice) VALUES (' +
+            id + "," + restid + ',"' + item + '","' + desc + '","' + amount + '")'))
+    })
 }
 
 module.exports = {
