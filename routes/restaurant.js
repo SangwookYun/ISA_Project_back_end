@@ -275,62 +275,63 @@ router.get('/all', function(req, res, next) { // Not working
  *       - Secured: []
  */
 router.get('/', (req, res) => { //used
-        console.log(req.body);
-        let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
-        console.log(result);
+    console.log(req.body);
+    let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
+    console.log(result);
 
-        result.then(([data, meta]) => {
-            // console.log(result)
-            console.log(data)
-            res.status(200).json(data)
-        }).catch(() => {
-            res.status(500).json({ message: "fail to get" })
-        });
-    })
-    // /**
-    //  * @swagger
-    //  * /restaurant/pic/:id:
-    //  *   post:
-    //  *     tags:
-    //  *       - Restaurant
-    //  *     description: Add a restaurant picture to DB
-    //  *     consumes:
-    //  *       - application/json
-    //  *     produces:
-    //  *       - application/json
-    //  *     parameters:
-    //  *       - name: id
-    //  *         in: query
-    //  *         require: true
-    //  *         type: string
-    //  *         example: 1
-    //  *     responses:
-    //  *       200:
-    //  *          description: Success
-    //  *          content:
-    //  *             application/json:
-    //  *              schema:
-    //  *                  type: object
-    //  *                  properties:
-    //  *                      message:
-    //  *                          type: String 
-    //  *       400:
-    //  *          description: Fail to add 
-    //  *       default:
-    //  *         description: Fail to add
-    //  *     security:
-    //  *       - Secured: []
-    //  */
-    // router.post('/pic/:id', function(req, res, next) {
-    //     let res_id = req.params['id']
-    //     let url = req.body['url'];
-    //     let result = resModel.updateResPic(res_id, url)
-    //     result.then(([data, meta]) => {
-    //         res.status(200).json({ message: "success" });
-    //     }).catch(() => {
-    //         res.status(500).json({ message: "fail to get" })
-    //     })
-    // })
+    result.then(([data, meta]) => {
+        // console.log(result)
+        console.log(data)
+        res.status(200).json(data)
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    });
+})
+
+// /**
+//  * @swagger
+//  * /restaurant/pic/:id:
+//  *   post:
+//  *     tags:
+//  *       - Restaurant
+//  *     description: Add a restaurant picture to DB
+//  *     consumes:
+//  *       - application/json
+//  *     produces:
+//  *       - application/json
+//  *     parameters:
+//  *       - name: id
+//  *         in: query
+//  *         require: true
+//  *         type: string
+//  *         example: 1
+//  *     responses:
+//  *       200:
+//  *          description: Success
+//  *          content:
+//  *             application/json:
+//  *              schema:
+//  *                  type: object
+//  *                  properties:
+//  *                      message:
+//  *                          type: String 
+//  *       400:
+//  *          description: Fail to add 
+//  *       default:
+//  *         description: Fail to add
+//  *     security:
+//  *       - Secured: []
+//  */
+// router.post('/pic/:id', function(req, res, next) {
+//     let res_id = req.params['id']
+//     let url = req.body['url'];
+//     let result = resModel.updateResPic(res_id, url)
+//     result.then(([data, meta]) => {
+//         res.status(200).json({ message: "success" });
+//     }).catch(() => {
+//         res.status(500).json({ message: "fail to get" })
+//     })
+// })
 
 // /**
 //  * @swagger
