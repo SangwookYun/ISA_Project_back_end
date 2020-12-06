@@ -5,7 +5,7 @@ const resModel = require('../model/restuarantModel')
 
 /**
  * @swagger
- * /api/restaurant/:id:
+ * /restaurant/:id:
  *   get:
  *     tags:
  *       - Restaurant
@@ -19,17 +19,32 @@ const resModel = require('../model/restuarantModel')
  *         in: query
  *         require: false
  *         type: string
- *         example: 1
+ *         example: 2
  *     responses:
- *       '201':
- *         description:  OK
- *         content:
+ *       200:
+ *          description:  OK
+ *          content:
  *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      restaurantid: 2,
+ *                       restaurant_name: 'Sushi California',
+ *                       restaurant_phone: '604-931-8284',
+ *                       restaurant_addr: '501 North Rd, Coquitlam',
+ *                       restaurant_desc: 'A casual dining sushi restaurant. The best place t'
+ *                   }
+ *               ]
+ *       400:
+ *         description: unauthorized
+ *       500:
+ *         description: fail to get
  *       default:
- *         description: Fail to get
+ *         description: unauthorized
  *     security:
  *       - Secured: []
  */
+<<<<<<< HEAD
 router.get('/:id', function(req, res, next) {
     if(req.header&& req.header.authorization  && req.headers.authorization.split(' ')[0]==='JWT') {
         jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode)=> {
@@ -53,30 +68,53 @@ router.get('/:id', function(req, res, next) {
         })
     }
   
+=======
+router.get('/:id', function(req, res, next) { //used
+    // console.log(req)
+    res_id = req.params['id']
+    result = resModel.getRestaurant(res_id)
+    result.then(([data, meta]) => {
+        // console.log(result)
+        console.log(data)
+        res.status(200).json(data)
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    });
+>>>>>>> 19d05f1377261f73515bcf5d5d36b9505ab71810
 })
 
 /**
  * @swagger
- * /api/restaurant/:
+ * /restaurant/:
  *   post:
  *     tags:
  *       - Restaurant
- *     description: add restauratn
+ *     description: add restaurant
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
  *     responses:
- *       '201':
- *         description: OK
+ *       200:
+ *         description:  OK
  *         content:
  *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      message: success
+ *                   }
+ *               ]
+ *       400:
+ *         description: Unauthorized
+ *       500:
+ *         description: fail to delete
  *       default:
  *         description: Unexpected Error
  *     security:
  *       - Secured: []
  */
-router.post('/', function(req, res, next) {
+router.post('/', function(req, res, next) { //used
     let new_res_name = req.body['restaurant_name'];
     resModel.getRestaurantByName(new_res_name).then((result) => {
         if (result[0].length == 0) {
@@ -85,7 +123,7 @@ router.post('/', function(req, res, next) {
                 countJSON = JSON.parse(JSON.stringify(result2))[0]
                 let count = (countJSON[0])["COUNT(*)"] + 1;
                 resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2) => {
-                    res.status(200).json(result2)
+                    res.status(200).json({ "message": "success" })
                 }).catch(() => {
                     console.log("failed")
                 });
@@ -99,7 +137,7 @@ router.post('/', function(req, res, next) {
 
 /**
  * @swagger
- * /api/restaurant/:id:
+ * /restaurant/:id:
  *   delete:
  *     tags:
  *       - Restaurant
@@ -111,31 +149,40 @@ router.post('/', function(req, res, next) {
  *     parameters:
  *       - name: id
  *         in: query
- *         require: false
+ *         require: true
  *         type: string
  *         example: 2
  *     responses:
- *       '201':
+ *       201:
  *         description: OK
+ *       400:
+ *         description: Unauthorized
+ *       500:
+ *         description: fail to delete
  *       default:
  *         description: Unexpected Error
  *     security:
  *       - Secured: []
  */
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', function(req, res, next) { //used
     console.log("Working? delete?")
     let res_id = req.params['id']
     result = resModel.deleteRestaurant(res_id)
-    res.status(200).json(result)
+    result.then(() => {
+        res.status(200).json({ "message": "Success" })
+    }).catch(() => {
+        res.status(500).json({ "message": "failed to delete" })
+    })
+
 })
 
 /**
  * @swagger
- * /api/restaurant/:id:
+ * /restaurant/:id:
  *   put:
  *     tags:
  *       - Restaurant
- *     description: Update restaurant
+ *     description: Update restaurant STILL NEED WORK
  *     consumes:
  *       - application/json
  *     produces:
@@ -161,7 +208,13 @@ router.delete('/:id', function(req, res, next) {
 router.put('/:id', function(req, res, next) {
     let res_id = req.params['id']
     result = resModel.updateRestaurant(res_id)
-    res.status(200).json(result)
+    result.then(() => {
+        res.status(200).json(result)
+    }).catch(() => {
+        res.status(500).json({
+            "message": "fail to update"
+        })
+    })
 
 })
 
@@ -169,7 +222,7 @@ router.put('/:id', function(req, res, next) {
 
 /**
  * @swagger
- * /api/all/:
+ * /restaurant/all/:
  *   get:
  *     tags:
  *       - Restaurant
@@ -183,11 +236,16 @@ router.put('/:id', function(req, res, next) {
  *          description: OK
  *          content:
  *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
+ *               example:
+ *                  [
+ *                   {
+ *                      restaurantid: 2,
+ *                       restaurant_name: 'Sushi California',
+ *                       restaurant_phone: '604-931-8284',
+ *                       restaurant_addr: '501 North Rd, Coquitlam',
+ *                       restaurant_desc: 'A casual dining sushi restaurant. The best place t'
+ *                   }
+ *               ]
  *       400:
  *          description: Fail to add 
  *       default:
@@ -195,7 +253,7 @@ router.put('/:id', function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.get('/all', function(req, res, next) {
+router.get('/all', function(req, res, next) { // Not working
 
     let result = resModel.getRestaurantAll()
     console.log(result);
@@ -209,93 +267,142 @@ router.get('/all', function(req, res, next) {
 
 /**
  * @swagger
- * /api/restaurant/pic/:id:
- *   post:
- *     tags:
- *       - Restaurant
- *     description: Add a restaurant picture to DB
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         in: query
- *         require: true
- *         type: string
- *         example: 1
- *     responses:
- *       200:
- *          description: Success
- *          content:
- *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
- *       400:
- *          description: Fail to add 
- *       default:
- *         description: Fail to add
- *     security:
- *       - Secured: []
- */
-router.post('/pic/:id', function(req, res, next) {
-    let res_id = req.params['id']
-    let url = req.body['url'];
-    let result = resModel.updateResPic(res_id, url)
-    result.then(([data, meta]) => {
-        res.status(200).json({ message: "success" });
-    }).catch(() => {
-        res.status(500).json({ message: "fail to get" })
-    })
-})
-
-/**
- * @swagger
- * /api/restaurant/pic/:id:
+ * /:
  *   get:
  *     tags:
  *       - Restaurant
- *     description: Get restaurant picture
+ *     description: Get all restaurant
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: id
- *         in: query
- *         require: true
- *         type: string
- *         example: 1
  *     responses:
  *       200:
- *          description: OK
- *          content:
- *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
+ *         description:  OK
+ *         content:
+ *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      restaurantid: 2,
+ *                       restaurant_name: 'Sushi California',
+ *                       restaurant_phone: '604-931-8284',
+ *                       restaurant_addr: '501 North Rd, Coquitlam',
+ *                       restaurant_desc: 'A casual dining sushi restaurant. The best place t'
+ *                   }
+ *               ]
  *       400:
- *          description: Fail to add 
+ *          description: Unauthorized
+ *       500:
+ *          description: fail to get 
  *       default:
- *         description: Fail to add
+ *         description: Unauthorized
  *     security:
  *       - Secured: []
  */
-router.get('/pic/:id', function(req, res, next) {
-    let res_id = req.params['id']
-    let result = resModel.getResPic(res_id)
+router.get('/', (req, res) => { //used
+    console.log(req.body);
+    let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
+    console.log(result);
+
     result.then(([data, meta]) => {
         // console.log(result)
         console.log(data)
         res.status(200).json(data)
     }).catch(() => {
-        res.status(500).json({ message: "fail to get picture" })
+        res.status(500).json({ message: "fail to get" })
     });
 })
+
+// /**
+//  * @swagger
+//  * /restaurant/pic/:id:
+//  *   post:
+//  *     tags:
+//  *       - Restaurant
+//  *     description: Add a restaurant picture to DB
+//  *     consumes:
+//  *       - application/json
+//  *     produces:
+//  *       - application/json
+//  *     parameters:
+//  *       - name: id
+//  *         in: query
+//  *         require: true
+//  *         type: string
+//  *         example: 1
+//  *     responses:
+//  *       200:
+//  *          description: Success
+//  *          content:
+//  *             application/json:
+//  *              schema:
+//  *                  type: object
+//  *                  properties:
+//  *                      message:
+//  *                          type: String 
+//  *       400:
+//  *          description: Fail to add 
+//  *       default:
+//  *         description: Fail to add
+//  *     security:
+//  *       - Secured: []
+//  */
+// router.post('/pic/:id', function(req, res, next) {
+//     let res_id = req.params['id']
+//     let url = req.body['url'];
+//     let result = resModel.updateResPic(res_id, url)
+//     result.then(([data, meta]) => {
+//         res.status(200).json({ message: "success" });
+//     }).catch(() => {
+//         res.status(500).json({ message: "fail to get" })
+//     })
+// })
+
+// /**
+//  * @swagger
+//  * /api/restaurant/pic/:id:
+//  *   get:
+//  *     tags:
+//  *       - Restaurant
+//  *     description: Get restaurant picture
+//  *     consumes:
+//  *       - application/json
+//  *     produces:
+//  *       - application/json
+//  *     parameters:
+//  *       - name: id
+//  *         in: query
+//  *         require: true
+//  *         type: string
+//  *         example: 1
+//  *     responses:
+//  *       200:
+//  *          description: OK
+//  *          content:
+//  *             application/json:
+//  *              schema:
+//  *                  type: object
+//  *                  properties:
+//  *                      message:
+//  *                          type: String 
+//  *       400:
+//  *          description: Fail to add 
+//  *       default:
+//  *         description: Fail to add
+//  *     security:
+//  *       - Secured: []
+//  */
+// router.get('/pic/:id', function(req, res, next) {
+//     let res_id = req.params['id']
+//     let result = resModel.getResPic(res_id)
+//     result.then(([data, meta]) => {
+//         // console.log(result)
+//         console.log(data)
+//         res.status(200).json(data)
+//     }).catch(() => {
+//         res.status(500).json({ message: "fail to get picture" })
+//     });
+// })
 
 module.exports = router;

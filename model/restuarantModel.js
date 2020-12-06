@@ -2,9 +2,7 @@ const db = require('../db');
 const { get } = require('../routes/menu');
 
 let getRestaurantAll = () => {
-    return new Promise((resolve, reject) => {
-        resolve(db.execute("SELECT *FROM restaurant"));
-    });
+    return db.execute("SELECT * FROM restaurant")
 }
 
 let getRestaurant = (id) => {
@@ -46,7 +44,9 @@ function updateRestaurant(id, name, phone, addr, desc) {
 }
 
 function deleteRestaurant(id) {
-    return db.execute('DELETE FROM restaurant WHERE restaurantid = ' + id)
+    return new Promise((resolve, reject) => {
+        db.execute('DELETE FROM restaurant WHERE restaurantid = ' + id)
+    })
 }
 
 function updateResPic(id, url) {

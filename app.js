@@ -17,9 +17,9 @@ app.use(bodyParser.json()) // middleware
 app.options('*', cors());
 app.use(cors());
 app.use(express.json());
-app.use('/api/menu', menu)
-app.use('/api/restaurant', restaurant)
-app.use('/api/user', user)
+app.use('/api/v1/menu', menu)
+app.use('/api/v1/restaurant', restaurant)
+app.use('/api/v1/user', user)
 const options = {
     swaggerDefinition: {
         openapi: "3.0.0",
@@ -37,74 +37,73 @@ const options = {
             },
         },
         servers: [{
-                url: "http://localhost:3000",
+                url: "http://localhost:3000/api/v1/",
                 description: "Development"
 
             },
             {
-                url: "https://api-jasonandyun.herokuapp.com",
+                url: "https://api-jasonandyun.herokuapp.com/api/v1/",
                 description: "live"
             }
         ],
     },
-    apis: ["./routes/menu.js", "./routes/restaurant.js", "app.js"],
+    apis: ["./routes/menu.js", "./routes/restaurant.js", "app.js", "./routes/user.js"],
 
 };
 const config = swaggerJSDoc(options)
 app.use(
-        "/api-docs",
+        "/docs",
         swaggerUI.serve,
         swaggerUI.setup(config)
     )
-    /**
-     * @swagger
-     * /api/:
-     *   get:
-     *     tags:
-     *       - home
-     *     description: Endpoint to accept a Friend Invite
-     *     consumes:
-     *       - application/json
-     *     produces:
-     *       - application/json
-     *     parameters:
-     *       - name: key
-     *         in: query
-     *         require: false
-     *         type: string
-     *         example: AIzaSyBaCfu1kM4SzuLhiRsu6Th6LfKl2lSuDHI
-     *       - in: body
-     *         name: body
-     *         required: false
-     *         schema:
-     *           $ref: []
-     *         examples:
-     *         application/json:  "{\n\t\"email\":\"john@example.com\"\n}"
-     *     responses:
-     *       '201':
-     *         description: Your friend has been added, congratulations on a new friend :)
-     *         content:
-     *           application/json; charset=utf-8:
-     *         schema:
-     *           $ref: '#/definitions/Model7'
-     *       default:
-     *         description: Unexpected Error
-     *     security:
-     *       - Secured: []
-     */
-app.get('/', (req, res) => {
-    console.log(req.body);
-    let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
-    console.log(result);
+    //     /**
+    //      * @swagger
+    //      * /:
+    //      *   get:
+    //      *     tags:
+    //      *       - home
+    //      *     description: Get all restaurant
+    //      *     consumes:
+    //      *       - application/json
+    //      *     produces:
+    //      *       - application/json
+    //      *     responses:
+    //      *       200:
+    //      *         description:  OK
+    //      *         content:
+    //      *           application/json; charset=utf-8:
+    //      *              example:
+    //      *                  [
+    //      *                   {
+    //      *                      restaurantid: 2,
+    //      *                       restaurant_name: 'Sushi California',
+    //      *                       restaurant_phone: '604-931-8284',
+    //      *                       restaurant_addr: '501 North Rd, Coquitlam',
+    //      *                       restaurant_desc: 'A casual dining sushi restaurant. The best place t'
+    //      *                   }
+    //      *               ]
+    //      *       400:
+    //      *          description: Unauthorized
+    //      *       500:
+    //      *          description: fail to get 
+    //      *       default:
+    //      *         description: Unauthorized
+    //      *     security:
+    //      *       - Secured: []
+    //      */
+    // app.get('/', (req, res) => { //used
+    //     console.log(req.body);
+    //     let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
+    //     console.log(result);
 
-    result.then(([data, meta]) => {
-        // console.log(result)
-        console.log(data)
-        res.status(200).json(data)
-    }).catch(() => {
-        res.status(500).json({ message: "fail to get" })
-    });
-})
+//     result.then(([data, meta]) => {
+//         // console.log(result)
+//         console.log(data)
+//         res.status(200).json(data)
+//     }).catch(() => {
+//         res.status(500).json({ message: "fail to get" })
+//     });
+// })
 
 
 app.listen(PORT, () => console.log("Listening..."))
