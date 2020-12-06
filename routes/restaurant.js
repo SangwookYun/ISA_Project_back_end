@@ -45,18 +45,14 @@ let jwt = require('jsonwebtoken')
      *       - Secured: []
      */
 router.get('/:id', function(req, res, next) {
-
-
-    if (req.header && req.header.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    console.log("Here inside?")
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
         jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
             if (err) {
+                console.log("error?")
                 return res.status(401).json({ message: 'Unauthorized user' })
             } else {
-
-                let user = decode;
-                console.log(user)
-                res_id = user['id']
-                    // res_id = req.params['id']
+                res_id = req.params['id']    
                 result = resModel.getRestaurant(res_id)
                 result.then(([data, meta]) => {
                     // console.log(result)
@@ -166,14 +162,25 @@ router.post('/', function(req, res, next) { //used
  *       - Secured: []
  */
 router.delete('/:id', function(req, res, next) { //used
-    console.log("Working? delete?")
-    let res_id = req.params['id']
-    result = resModel.deleteRestaurant(res_id)
-    result.then(() => {
-        res.status(200).json({ "message": "Success" })
-    }).catch(() => {
-        res.status(500).json({ "message": "failed to delete" })
-    })
+     
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            if (err) {
+                console.log("error?")
+                return res.status(401).json({ message: 'Unauthorized user' })
+            } else {
+    
+                let res_id = req.params['id']
+                result = resModel.deleteRestaurant(res_id)
+                result.then(() => {
+                    res.status(200).json({ "message": "Success" })
+                }).catch(() => {
+                    res.status(500).json({ "message": "failed to delete" })
+                })
+            }
+        })
+    }
+    
 
 })
 
@@ -207,16 +214,26 @@ router.delete('/:id', function(req, res, next) { //used
  *       - Secured: []
  */
 router.put('/:id', function(req, res, next) {
-    let res_id = req.params['id']
-    result = resModel.updateRestaurant(res_id)
-    result.then(() => {
-        res.status(200).json(result)
-    }).catch(() => {
-        res.status(500).json({
-            "message": "fail to update"
-        })
-    })
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            if (err) {
+                console.log("error?")
+                return res.status(401).json({ message: 'Unauthorized user' })
+            } else {
+                let res_id = req.params['id']
+                result = resModel.updateRestaurant(res_id)
+                result.then(() => {
+                    res.status(200).json(result)
+                }).catch(() => {
+                    res.status(500).json({
+                        "message": "fail to update"
+                    })
+                })
 
+            }
+        })
+    }
+    
 })
 
 
@@ -254,16 +271,26 @@ router.put('/:id', function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.get('/all', function(req, res, next) { // Not working
+router.get('/all/rest', function(req, res, next) { // Not working
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            if (err) {
+                console.log("error?")
+                return res.status(401).json({ message: 'Unauthorized user' })
+            } else {
+                let result = resModel.getRestaurantAll()
+                console.log(result);
+                result.then(([data, meta]) => {
+                    console.log(data);
+                    res.status(200).json(data);
+                }).catch(() => {
+                    res.status(500).json({ message: "fail to get" })
+                })
+            }
+        })
+    }
 
-    let result = resModel.getRestaurantAll()
-    console.log(result);
-    result.then(([data, meta]) => {
-        console.log(data);
-        res.status(200).json(data);
-    }).catch(() => {
-        res.status(500).json({ message: "fail to get" })
-    })
+
 })
 
 /**
@@ -303,23 +330,28 @@ router.get('/all', function(req, res, next) { // Not working
  */
 router.get('/', (req, res) => { //used
 
-    if (req.header && req.header.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
         jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            console.log("ASDFASDFA", decode)
+            if (err) {
+                console.log("error?")
+                return res.status(401).json({ message: 'Unauthorized user' })
+            } else {
+                console.log(req.body);
+                let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
+                console.log(result);
+            
+                result.then(([data, meta]) => {
+                    // console.log(result)
+                    console.log(data)
+                    res.status(200).json(data)
+                }).catch(() => {
+                    res.status(500).json({ message: "fail to get" })
+                });
+            }
         })
     }
 
-    console.log(req.body);
-    let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
-    console.log(result);
-
-    result.then(([data, meta]) => {
-        // console.log(result)
-        console.log(data)
-        res.status(200).json(data)
-    }).catch(() => {
-        res.status(500).json({ message: "fail to get" })
-    });
+  
 })
 
 // /**

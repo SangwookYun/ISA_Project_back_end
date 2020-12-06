@@ -8,8 +8,11 @@ function getMenu(id) {
 
 function updateMenu(id, restid, item, amount, desc) { // Need update
     return new Promise((resolve, reject) => {
-        resolve(db.execute('UPDATE menu (menuid, restaurantid, items, menudescription, menuprice) VALUES (' +
-            id + "," + restid + ',"' + item + '","' + desc + '","' + amount + '")'))
+        console.log()
+        console.log('UPDATE menu SET restaurantid = ' + restid+', items = "' + item + '", menudescription = "'+ 
+        desc + '", menuprice = "'+ amount +'" WHERE menuid = '+ id)
+        resolve(db.execute('UPDATE menu SET restaurantid = ' + restid+', items = "' + item + '", menudescription = "'+ 
+        desc + '", menuprice = "'+ amount +'" WHERE menuid = '+ id))
     })
 }
 
