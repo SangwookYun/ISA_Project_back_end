@@ -31,6 +31,8 @@ app.use((req, res, next) => {
                 next()
             }
         })
+    } else {
+        res.status(401).json({ message: req.header.authorization })
     }
 })
 app.use('/api/v1/menu', menu)
