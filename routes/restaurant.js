@@ -285,7 +285,7 @@ router.get('/all/rest', async function(req, res, next) {
 router.get('/', async function(req, res, next) { //used
 
     // let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
-
+    console.log(req.headers.authorization)
     resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
         .then(([data, meta]) => {
             // console.log(result)
