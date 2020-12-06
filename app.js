@@ -11,6 +11,7 @@ const swaggerUI = require('swagger-ui-express')
 const resModel = require('./model/restuarantModel')
 let jwt = require('jsonwebtoken')
 
+
 app.use(bodyParser.urlencoded({ extended: true })) // middleware
 
 app.use(bodyParser.json()) // middleware

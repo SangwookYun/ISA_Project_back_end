@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db')
 const resModel = require('../model/restuarantModel')
-
+let jwt = require('jsonwebtoken')
 /**
  * @swagger
  * /restaurant/:id:
@@ -44,8 +44,9 @@ const resModel = require('../model/restuarantModel')
  *     security:
  *       - Secured: []
  */
-<<<<<<< HEAD
 router.get('/:id', function(req, res, next) {
+
+    
     if(req.header&& req.header.authorization  && req.headers.authorization.split(' ')[0]==='JWT') {
         jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode)=> {
             if(err) {
@@ -68,19 +69,6 @@ router.get('/:id', function(req, res, next) {
         })
     }
   
-=======
-router.get('/:id', function(req, res, next) { //used
-    // console.log(req)
-    res_id = req.params['id']
-    result = resModel.getRestaurant(res_id)
-    result.then(([data, meta]) => {
-        // console.log(result)
-        console.log(data)
-        res.status(200).json(data)
-    }).catch(() => {
-        res.status(500).json({ message: "fail to get" })
-    });
->>>>>>> 19d05f1377261f73515bcf5d5d36b9505ab71810
 })
 
 /**
@@ -115,24 +103,43 @@ router.get('/:id', function(req, res, next) { //used
  *       - Secured: []
  */
 router.post('/', function(req, res, next) { //used
-    let new_res_name = req.body['restaurant_name'];
-    resModel.getRestaurantByName(new_res_name).then((result) => {
-        if (result[0].length == 0) {
-            let count_query = resModel.countRestaurant()
-            count_query.then((result2) => {
-                countJSON = JSON.parse(JSON.stringify(result2))[0]
-                let count = (countJSON[0])["COUNT(*)"] + 1;
-                resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2) => {
-                    res.status(200).json({ "message": "success" })
+    
+    console.log("called")
+    console.log(req.body)
+    // console.log(req.headers) //undefined
+    // console.log(req.headers.authorization)
+    // console.log(req.headers.authorization.split(' '))
+    // console.log(req.headers.authorization.split(' ')[0])
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            if(err) {
+                console.log("error?")
+                return res.status(401).json({message:'Unauthroized user'});
+            }else {
+                console.log("not error")
+                console.log(req.body)
+                let new_res_name = req.body['restaurant_name'];
+                resModel.getRestaurantByName(new_res_name).then((result) => {
+                    if (result[0].length == 0) {
+                        let count_query = resModel.countRestaurant()
+                        count_query.then((result2) => {
+                            countJSON = JSON.parse(JSON.stringify(result2))[0]
+                            let count = (countJSON[0])["COUNT(*)"] + 1;
+                            resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2) => {
+                                res.status(200).json({ "message": "success" })
+                            }).catch(() => {
+                                console.log("failed")
+                            });
+            
+                        })
+                    }
                 }).catch(() => {
                     console.log("failed")
-                });
-
-            })
-        }
-    }).catch(() => {
-        console.log("failed")
-    })
+                })
+            }
+        })
+    }
+    
 })
 
 /**
@@ -301,6 +308,13 @@ router.get('/all', function(req, res, next) { // Not working
  *       - Secured: []
  */
 router.get('/', (req, res) => { //used
+
+    if (req.header && req.header.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            console.log("ASDFASDFA", decode)
+        })
+    }
+
     console.log(req.body);
     let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
     console.log(result);

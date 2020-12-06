@@ -54,19 +54,14 @@ let jwt = require('jsonwebtoken')
  */
 router.get('/:userid&:userpassword', function(req, res, next) { // used
 
-    if (req.header && req.header.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            console.log(decode)
-        })
-    }
     console.log(req.params)
+    
     id = req.params['userid']
     console.log(req.params['userpassword'])
     result = userModel.getUser(id)
     result.then(([data, meta]) => {
-        console.log(data)
+        console.log("what is the data", data)
         let id_pwd = JSON.parse(JSON.stringify(data))[0];
-        console.log(id_pwd)
         if (id_pwd['password'] == req.params['userpassword']) {
             console.log(data[0].userid)
             console.log(data[0].password)
