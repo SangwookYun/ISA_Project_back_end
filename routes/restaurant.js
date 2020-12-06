@@ -267,7 +267,7 @@ router.get('/all', function(req, res, next) { // Not working
 
 /**
  * @swagger
- * /:
+ * /restaurant/:
  *   get:
  *     tags:
  *       - Restaurant

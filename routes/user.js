@@ -8,15 +8,7 @@ let jwt = require('jsonwebtoken')
 
 
 
-<<<<<<< HEAD
-router.get('/:userid&:userpassword', function(req, res, next) {
 
-    if(req.header&& req.header.authorization  && req.headers.authorization.split(' ')[0]==='JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode)=> {
-            console.log(decode)
-        })
-    }
-=======
 /**
  * @swagger
  * /user/:userid&:userpassword:
@@ -61,7 +53,12 @@ router.get('/:userid&:userpassword', function(req, res, next) {
  *       - Secured: []
  */
 router.get('/:userid&:userpassword', function(req, res, next) { // used
->>>>>>> 19d05f1377261f73515bcf5d5d36b9505ab71810
+
+    if (req.header && req.header.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            console.log(decode)
+        })
+    }
     console.log(req.params)
     id = req.params['userid']
     console.log(req.params['userpassword'])
@@ -70,25 +67,18 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
         console.log(data)
         let id_pwd = JSON.parse(JSON.stringify(data))[0];
         console.log(id_pwd)
-<<<<<<< HEAD
-        if(id_pwd['password']==req.params['userpassword']) {
+        if (id_pwd['password'] == req.params['userpassword']) {
             console.log(data[0].userid)
             console.log(data[0].password)
-            // res.status(200).json(data)
+                // res.status(200).json(data)
 
-            res.status(200).json({token:
-                jwt.sign({
-                    username:data[0].userid,
-                    password:data[0].password
+            res.status(200).json({
+                token: jwt.sign({
+                    username: data[0].userid,
+                    password: data[0].password
                 }, "MYSECRETKEY")
             })
-        }else {
-=======
-        if (id_pwd['password'] == req.params['userpassword']) {
-
-            res.status(200).json(data)
         } else {
->>>>>>> 19d05f1377261f73515bcf5d5d36b9505ab71810
             res.end('password wrong')
         }
     }).catch(() => {
@@ -97,7 +87,7 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
 });
 /**
  * @swagger
- * /signup/:userid:
+ * /user/signup/:userid:
  *   post:
  *     tags:
  *       - SignUP
@@ -135,6 +125,7 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
 router.get('/signup/:userid', function(req, res, next) { // used
     console.log(req.params)
     id = req.params['userid']
+    console.log(id)
     result = userModel.getUser(id)
     result.then(([data, meta]) => {
         console.log(data)
@@ -152,7 +143,7 @@ router.get('/signup/:userid', function(req, res, next) { // used
 });
 /**
  * @swagger
- * /new/signup:
+ * /user/new/signup:
  *   post:
  *     tags:
  *       - SignUP
