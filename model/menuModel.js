@@ -1,7 +1,7 @@
 const db = require('../db')
 
 function getMenu(id) {
-    return db.execute("SELECT * FROM menu WHERE restaurantid ='" + id + "'"))
+    return db.execute("SELECT * FROM menu WHERE restaurantid ='" + id + "'")
 }
 
 function updateMenu(id, restid, item, amount, desc) {
