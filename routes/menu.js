@@ -39,7 +39,7 @@ let jwt = require('jsonwebtoken')
  *     security:
  *       - Secured: []
  */
-router.post('/rest/:restaurantid', async function(req, res, next) { //used // Need 
+router.post('/rest/:restaurantid', async function(req, res, next) {
 
     count = menuModel.countItems()
 

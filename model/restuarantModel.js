@@ -6,9 +6,9 @@ let getRestaurantAll = () => {
 }
 
 let getRestaurant = (id) => {
-    return new Promise((resolve, reject) => {
-        resolve(db.execute("SELECT * FROM restaurant WHERE restaurantid = '" + id + "'"));
-    });
+
+    return db.execute("SELECT * FROM restaurant WHERE restaurantid = '" + id + "'");
+
 }
 
 let getRestaurant_top_3 = (id) => {
