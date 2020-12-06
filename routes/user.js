@@ -6,8 +6,8 @@ const userModel = require('../model/userModel')
 
 /**
  * @swagger
- * /api/:userid&:userpassword:
- *   post:
+ * /user/:userid&:userpassword:
+ *   get:
  *     tags:
  *       - SignUP
  *     description: add restauratn
@@ -15,11 +15,33 @@ const userModel = require('../model/userModel')
  *       - application/json
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: userid
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
+ *       - name: userpassword
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: mypassword
  *     responses:
- *       '201':
- *         description: OK
+ *       200:
+ *         description:  OK
  *         content:
  *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      userid: test2,
+ *                      password: qwer
+ *                   }
+ *               ]
+ *       400:
+ *          description: Unauthorized
+ *       500:
+ *          description: fail to get 
  *       default:
  *         description: Unexpected Error
  *     security:
@@ -46,7 +68,7 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
 });
 /**
  * @swagger
- * /api/signup/:userid:
+ * /signup/:userid:
  *   post:
  *     tags:
  *       - SignUP
@@ -55,13 +77,29 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
  *       - application/json
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: menuid
+ *         in: query
+ *         require: true
+ *         type: string
+ *         example: 1
  *     responses:
- *       '201':
+ *       200:
  *         description: OK
  *         content:
  *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      data: True
+ *                   }
+ *               ]
+ *       400:
+ *         description: Unauthroized
+ *       500:
+ *         description: Fail to get
  *       default:
- *         description: Unexpected Error
+ *         description: Unauthroized
  *     security:
  *       - Secured: []
  */
@@ -78,27 +116,56 @@ router.get('/signup/:userid', function(req, res, next) { // used
         }
 
     }).catch(() => {
-        console.log("error occurs")
+        res.status(500).json(({
+            "message": "fail to get"
+        }))
     });
 });
 /**
  * @swagger
- * /api/new/signup:
+ * /new/signup:
  *   post:
  *     tags:
  *       - SignUP
- *     description: add restauratn
+ *     description: add user
  *     consumes:
  *       - application/json
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: new_id
+ *         in: body
+ *         require: true
+ *         type: string
+ *         example:
+ *                   {
+ *                      new_id: mypassword
+ *                   }
+ *       - name: new_password
+ *         in: body
+ *         require: true
+ *         type: string
+ *         example: 
+ *                   {
+ *                      new_password: mypassword
+ *                   }
  *     responses:
- *       '201':
- *         description: OK
+ *       200:
+ *         description:  OK
  *         content:
  *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      message: success
+ *                   }
+ *               ]
+ *       400:
+ *         description: unauthorized
+ *       500: 
+ *         description: failed to add 
  *       default:
- *         description: Unexpected Error
+ *         description: unauthorized
  *     security:
  *       - Secured: []
  */
@@ -108,7 +175,7 @@ router.post('/new/signup', function(req, res, next) { // used
     result = userModel.addUser(req.body['new_id'], req.body['new_password'])
     result.then(([data, meta]) => {
         console.log(data)
-        res.status(200).json(data)
+        res.status(200).json(({ "message": "success" }))
 
     }).catch(() => {
         console.log("error occurs")
