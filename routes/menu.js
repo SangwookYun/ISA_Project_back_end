@@ -6,7 +6,7 @@ const menuModel = require('../model/menuModel')
 
 /**
  * @swagger
- * /api/menu/:restaurantid:
+ * /menu/rest/:restaurantid:
  *   post:
  *     tags:
  *       - Menu
@@ -38,7 +38,7 @@ const menuModel = require('../model/menuModel')
  *     security:
  *       - Secured: []
  */
-router.post('/:restaurantid', function(req, res, next) { //used
+router.post('/rest/:restaurantid', function(req, res, next) { //used // Need update
     console.log("int here?")
     console.log(req.body)
     count = menuModel.countItems()
@@ -58,7 +58,7 @@ router.post('/:restaurantid', function(req, res, next) { //used
 
 /**
  * @swagger
- * /api/menu/all/:restaurantid:
+ * /menu/all/:restaurantid:
  *   get:
  *     tags:
  *       - Menu
@@ -72,26 +72,46 @@ router.post('/:restaurantid', function(req, res, next) { //used
  *         in: query
  *         require: true
  *         type: string
- *         example: 1
+ *         example: 2
  *     responses:
  *       200:
  *          description: OK
  *          content:
  *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
+ *                example:
+ *                    [
+ *                     {
+ *                          "menuid": 1,
+ *                          "restaurantid": "2",
+ *                          "items": "California Combo",
+ *                          "menudescription": "California roll, two pieces of salmon sushi, one piece of tuna sushi, and one piece of ebi sushi.",
+ *                          "menuprice": "$10.50"
+ *                      },
+ *                      {
+ *                          "menuid": 2,
+ *                          "restaurantid": "2",
+ *                          "items": "A. Party Tray for 2 Persons",
+ *                          "menudescription": "California roll, dynamite roll, two pieces of tuna sushi, two pieces of salmon sushi, two pieces of ebi sushi, two pieces of hokkigai sushi, one piece of masago sushi, and one plain udon. Serves two persons.",
+ *                          "menuprice": "$30.95"
+ *                      },
+ *                      {
+ *                          "menuid": 3,
+ *                          "restaurantid": "2",
+ *                          "items": "Ebi Sunomono",
+ *                          "menudescription": "A tasty blend of diced cucumbers, cooked shrimp, and thin rice noodles.",
+ *                          "menuprice": "$4.95"
+ *                      }
+ *                    ]
  *       400:
- *          description: Fail to Get  
+ *          description: Unauthorized
+ *       500:
+ *          descriiption: fail to get  
  *       default:
  *         description: Fail to Get
  *     security:
  *       - Secured: []
  */
 router.get('/all/:restaurantid', function(req, res, next) {
-    // Need to update
     let getMenu = menuModel.getMenu(req.params['restaurantid'])
     getMenu.then((result) => {
         let curMenu = JSON.parse(JSON.stringify(result))[0];
@@ -107,7 +127,7 @@ router.get('/all/:restaurantid', function(req, res, next) {
 
 /**
  * @swagger
- * /api/menu/:menuid:
+ * /menu/:menuid:
  *   delete:
  *     tags:
  *       - Menu
@@ -124,18 +144,21 @@ router.get('/all/:restaurantid', function(req, res, next) {
  *         example: 1
  *     responses:
  *       200:
- *          description: OK
- *          content:
- *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
+ *         description: OK
+ *         content:
+ *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      message: Success
+ *                   }
+ *               ]
+ *       400:
+ *         description: Unauthroized
  *       500:
- *          description: Fail to delete 
- *       default:
  *         description: Fail to delete
+ *       default:
+ *         description: Unauthroized
  *     security:
  *       - Secured: []
  */
@@ -143,7 +166,7 @@ router.delete('/:menuid', function(req, res, next) { //used
     menu_id = req.params['menuid']
     result = menuModel.deleteMenu(menu_id)
     result.then(([data, meta]) => {
-        res.status(200).json(data)
+        res.status(200).json({ message: "success" })
     }).catch(() => {
         res.status(500).json({ message: "fail to delete" })
     })
@@ -151,7 +174,7 @@ router.delete('/:menuid', function(req, res, next) { //used
 
 /**
  * @swagger
- * /api/menu/:menuid:
+ * /menu/:menuid:
  *   put:
  *     tags:
  *       - Menu
@@ -168,18 +191,21 @@ router.delete('/:menuid', function(req, res, next) { //used
  *         example: 1
  *     responses:
  *       200:
- *          description: OK
- *          content:
- *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message:
- *                          type: String 
+ *         description: OK
+ *         content:
+ *           application/json; charset=utf-8:
+ *              example:
+ *                  [
+ *                   {
+ *                      message: Success
+ *                   }
+ *               ]
  *       400:
- *          description: Fail to add 
+ *         description: Unauthroized
+ *       500:
+ *         description: Fail to update
  *       default:
- *         description: Fail to add
+ *         description: Unauthroized
  *     security:
  *       - Secured: []
  */
@@ -188,7 +214,8 @@ router.put('/:menuid', function(req, res, next) {
     let item = req.body['menu_item']
     result = menuModel.updateMenu(res_id, item)
     result.then(([data, meta]) => {
-        res.status(200).json(data)
+        res.status(200).json({ message: "Success" })
+
     }).catch(() => {
         res.status(400).json({ message: "fail to update" })
     })
