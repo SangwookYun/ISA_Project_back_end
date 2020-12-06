@@ -11,13 +11,7 @@ const addUser = (id, password) => {
     console.log('INSERT INTO user (userid, password) VALUES ("' +
         id + '","' + password + '")')
     return db.execute('INSERT INTO user (userid, password) VALUES ("' +
-            id + '","' + password + '")')
-        // return new Promise((resolve, reject) => {
-        //     console.log('INSERT INTO user (userid, password) VALUES ("' +
-        //         id + '","' + password + '")')
-        //     resolve(db.execute('INSERT INTO user (userid, password) VALUES ("' +
-        //         id + '","' + password + '")'))
-        // })
+        id + '","' + password + '")')
 }
 
 

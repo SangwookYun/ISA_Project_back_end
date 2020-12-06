@@ -45,25 +45,25 @@ let jwt = require('jsonwebtoken')
      *       - Secured: []
      */
 router.get('/:id', function(req, res, next) {
-    console.log("Here inside?")
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if (err) {
-                console.log("error?")
-                return res.status(401).json({ message: 'Unauthorized user' })
-            } else {
-                res_id = req.params['id']    
-                result = resModel.getRestaurant(res_id)
-                result.then(([data, meta]) => {
-                    // console.log(result)
-                    console.log(data)
-                    res.status(200).json(data)
-                }).catch(() => {
-                    res.status(500).json({ message: "fail to get" })
-                });
-            }
-        })
-    }
+    // console.log("Here inside?")
+    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+    //         if (err) {
+    //             console.log("error?")
+    //             return res.status(401).json({ message: 'Unauthorized user' })
+    //         } else {
+    res_id = req.params['id']
+    result = resModel.getRestaurant(res_id)
+    result.then(([data, meta]) => {
+        // console.log(result)
+        console.log(data)
+        res.status(200).json(data)
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    });
+    //     }
+    // })
+    // }
 
 })
 
@@ -100,35 +100,35 @@ router.get('/:id', function(req, res, next) {
  */
 router.post('/', function(req, res, next) { //used
 
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if (err) {
-                console.log("error?")
-                return res.status(401).json({ message: 'Unauthroized user' });
-            } else {
-                console.log("not error")
-                console.log(req.body)
-                let new_res_name = req.body['restaurant_name'];
-                resModel.getRestaurantByName(new_res_name).then((result) => {
-                    if (result[0].length == 0) {
-                        let count_query = resModel.countRestaurant()
-                        count_query.then((result2) => {
-                            countJSON = JSON.parse(JSON.stringify(result2))[0]
-                            let count = (countJSON[0])["COUNT(*)"] + 1;
-                            resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2) => {
-                                res.status(200).json({ "message": "success" })
-                            }).catch(() => {
-                                console.log("failed")
-                            });
+    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+    //         if (err) {
+    //             console.log("error?")
+    //             return res.status(401).json({ message: 'Unauthroized user' });
+    //         } else {
+    console.log("not error")
+    console.log(req.body)
+    let new_res_name = req.body['restaurant_name'];
+    resModel.getRestaurantByName(new_res_name).then((result) => {
+            if (result[0].length == 0) {
+                let count_query = resModel.countRestaurant()
+                count_query.then((result2) => {
+                    countJSON = JSON.parse(JSON.stringify(result2))[0]
+                    let count = (countJSON[0])["COUNT(*)"] + 1;
+                    resModel.addRestaurant(count, req.body['restaurant_name'], req.body['restaurant_phone'], req.body['restaurant_addr'], req.body['restaurant_desc']).then((result2) => {
+                        res.status(200).json({ "message": "success" })
+                    }).catch(() => {
+                        console.log("failed")
+                    });
 
-                        })
-                    }
-                }).catch(() => {
-                    console.log("failed")
                 })
             }
+        }).catch(() => {
+            console.log("failed")
         })
-    }
+        //         }
+        //     })
+        // }
 
 })
 
@@ -162,25 +162,25 @@ router.post('/', function(req, res, next) { //used
  *       - Secured: []
  */
 router.delete('/:id', function(req, res, next) { //used
-     
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if (err) {
-                console.log("error?")
-                return res.status(401).json({ message: 'Unauthorized user' })
-            } else {
-    
-                let res_id = req.params['id']
-                result = resModel.deleteRestaurant(res_id)
-                result.then(() => {
-                    res.status(200).json({ "message": "Success" })
-                }).catch(() => {
-                    res.status(500).json({ "message": "failed to delete" })
-                })
-            }
+
+    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+    //         if (err) {
+    //             console.log("error?")
+    //             return res.status(401).json({ message: 'Unauthorized user' })
+    //         } else {
+
+    let res_id = req.params['id']
+    result = resModel.deleteRestaurant(res_id)
+    result.then(() => {
+            res.status(200).json({ "message": "Success" })
+        }).catch(() => {
+            res.status(500).json({ "message": "failed to delete" })
         })
-    }
-    
+        // }
+        //     })
+        // }
+
 
 })
 
@@ -214,26 +214,26 @@ router.delete('/:id', function(req, res, next) { //used
  *       - Secured: []
  */
 router.put('/:id', function(req, res, next) {
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if (err) {
-                console.log("error?")
-                return res.status(401).json({ message: 'Unauthorized user' })
-            } else {
-                let res_id = req.params['id']
-                result = resModel.updateRestaurant(res_id)
-                result.then(() => {
-                    res.status(200).json(result)
-                }).catch(() => {
-                    res.status(500).json({
-                        "message": "fail to update"
-                    })
-                })
-
-            }
+    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+    //         if (err) {
+    //             console.log("error?")
+    //             return res.status(401).json({ message: 'Unauthorized user' })
+    //         } else {
+    let res_id = req.params['id']
+    result = resModel.updateRestaurant(res_id)
+    result.then(() => {
+        res.status(200).json(result)
+    }).catch(() => {
+        res.status(500).json({
+            "message": "fail to update"
         })
-    }
-    
+    })
+
+    //         }
+    //     })
+    // }
+
 })
 
 
@@ -271,24 +271,24 @@ router.put('/:id', function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.get('/all/rest', function(req, res, next) { // Not working
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if (err) {
-                console.log("error?")
-                return res.status(401).json({ message: 'Unauthorized user' })
-            } else {
-                let result = resModel.getRestaurantAll()
-                console.log(result);
-                result.then(([data, meta]) => {
-                    console.log(data);
-                    res.status(200).json(data);
-                }).catch(() => {
-                    res.status(500).json({ message: "fail to get" })
-                })
-            }
+router.get('/all/rest', function(req, res, next) {
+    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+    //         if (err) {
+    //             console.log("error?")
+    //             return res.status(401).json({ message: 'Unauthorized user' })
+    //         } else {
+    let result = resModel.getRestaurantAll()
+    console.log(result);
+    result.then(([data, meta]) => {
+            console.log(data);
+            res.status(200).json(data);
+        }).catch(() => {
+            res.status(500).json({ message: "fail to get" })
         })
-    }
+        //         }
+        //     })
+        // }
 
 
 })
@@ -330,119 +330,28 @@ router.get('/all/rest', function(req, res, next) { // Not working
  */
 router.get('/', (req, res) => { //used
 
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if (err) {
-                console.log("error?")
-                return res.status(401).json({ message: 'Unauthorized user' })
-            } else {
-                console.log(req.body);
-                let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
-                console.log(result);
-            
-                result.then(([data, meta]) => {
-                    // console.log(result)
-                    console.log(data)
-                    res.status(200).json(data)
-                }).catch(() => {
-                    res.status(500).json({ message: "fail to get" })
-                });
-            }
-        })
-    }
+    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+    //         if (err) {
+    //             console.log("error?")
+    //             return res.status(401).json({ message: 'Unauthorized user' })
+    //         } else {
+    console.log(req.body);
+    let result = resModel.getRestaurant_top_3("'3' OR restaurantid ='2' OR restaurantid ='1'")
+    console.log(result);
 
-  
+    result.then(([data, meta]) => {
+        // console.log(result)
+        console.log(data)
+        res.status(200).json(data)
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    });
+    //         }
+    //     })
+    // }
+
+
 })
-
-// /**
-//  * @swagger
-//  * /restaurant/pic/:id:
-//  *   post:
-//  *     tags:
-//  *       - Restaurant
-//  *     description: Add a restaurant picture to DB
-//  *     consumes:
-//  *       - application/json
-//  *     produces:
-//  *       - application/json
-//  *     parameters:
-//  *       - name: id
-//  *         in: query
-//  *         require: true
-//  *         type: string
-//  *         example: 1
-//  *     responses:
-//  *       200:
-//  *          description: Success
-//  *          content:
-//  *             application/json:
-//  *              schema:
-//  *                  type: object
-//  *                  properties:
-//  *                      message:
-//  *                          type: String 
-//  *       400:
-//  *          description: Fail to add 
-//  *       default:
-//  *         description: Fail to add
-//  *     security:
-//  *       - Secured: []
-//  */
-// router.post('/pic/:id', function(req, res, next) {
-//     let res_id = req.params['id']
-//     let url = req.body['url'];
-//     let result = resModel.updateResPic(res_id, url)
-//     result.then(([data, meta]) => {
-//         res.status(200).json({ message: "success" });
-//     }).catch(() => {
-//         res.status(500).json({ message: "fail to get" })
-//     })
-// })
-
-// /**
-//  * @swagger
-//  * /api/restaurant/pic/:id:
-//  *   get:
-//  *     tags:
-//  *       - Restaurant
-//  *     description: Get restaurant picture
-//  *     consumes:
-//  *       - application/json
-//  *     produces:
-//  *       - application/json
-//  *     parameters:
-//  *       - name: id
-//  *         in: query
-//  *         require: true
-//  *         type: string
-//  *         example: 1
-//  *     responses:
-//  *       200:
-//  *          description: OK
-//  *          content:
-//  *             application/json:
-//  *              schema:
-//  *                  type: object
-//  *                  properties:
-//  *                      message:
-//  *                          type: String 
-//  *       400:
-//  *          description: Fail to add 
-//  *       default:
-//  *         description: Fail to add
-//  *     security:
-//  *       - Secured: []
-//  */
-// router.get('/pic/:id', function(req, res, next) {
-//     let res_id = req.params['id']
-//     let result = resModel.getResPic(res_id)
-//     result.then(([data, meta]) => {
-//         // console.log(result)
-//         console.log(data)
-//         res.status(200).json(data)
-//     }).catch(() => {
-//         res.status(500).json({ message: "fail to get picture" })
-//     });
-// })
 
 module.exports = router;
