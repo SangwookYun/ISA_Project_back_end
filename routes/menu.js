@@ -1,6 +1,5 @@
 const { json } = require('body-parser');
 const express = require('express');
-const { getMenu } = require('../model/menuModel');
 const router = express.Router();
 const menuModel = require('../model/menuModel')
 let jwt = require('jsonwebtoken')
@@ -40,32 +39,24 @@ let jwt = require('jsonwebtoken')
  *     security:
  *       - Secured: []
  */
-router.post('/rest/:restaurantid', function(req, res, next) { //used // Need 
-    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-    //         if (err) {
-    //             console.log("error?")
-    //             return res.status(401).json({ message: 'Unauthorized user' })
-    //         } else {
+router.post('/rest/:restaurantid', async function(req, res, next) { //used // Need 
+
     count = menuModel.countItems()
 
     count.then((result) => {
-            let result_count = result[0];
-            result_count = JSON.parse(JSON.stringify(result_count))[0]
-            console.log(result_count)
-            let new_idx = (result_count)["COUNT(*)"] + 3;
-            console.log(new_idx);
+        let result_count = result[0];
+        result_count = JSON.parse(JSON.stringify(result_count))[0]
+        console.log(result_count)
+        let new_idx = (result_count)["COUNT(*)"] + 3;
+        console.log(new_idx);
 
-            menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc']).then((result) => {
-                console.log('success')
-                res.status(200).json({ message: "success" })
-            }).catch(() => {
-                res.status(500).json("failed to add")
-            })
+        menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc']).then((result) => {
+            console.log('success')
+            res.status(200).json({ message: "success" })
+        }).catch(() => {
+            res.status(500).json("failed to add")
         })
-        //         }
-        //     })
-        // }
+    })
 
 })
 
@@ -125,25 +116,16 @@ router.post('/rest/:restaurantid', function(req, res, next) { //used // Need
  *     security:
  *       - Secured: []
  */
-router.get('/all/:restaurantid', function(req, res, next) {
-    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-    //         if (err) {
-    //             console.log("error?")
-    //             return res.status(401).json({ message: 'Unauthorized user' })
-    //         } else {
+router.get('/all/:restaurantid', async function(req, res, next) {
+
     let getMenu = menuModel.getMenu(req.params['restaurantid'])
     getMenu.then((result) => {
-            let curMenu = JSON.parse(JSON.stringify(result))[0];
-            console.log(curMenu);
-            res.status(200).json(curMenu);
-        }).catch(() => {
-            res.status(500).json({ message: "fail to get" })
-        })
-        //         }
-        //     });
-        // }
-
+        let curMenu = JSON.parse(JSON.stringify(result))[0];
+        console.log(curMenu);
+        res.status(200).json(curMenu);
+    }).catch(() => {
+        res.status(500).json({ message: "fail to get" })
+    })
 
 })
 
@@ -185,23 +167,16 @@ router.get('/all/:restaurantid', function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.delete('/:menuid', function(req, res, next) { //used
-    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-    //         if (err) {
-    //             console.log("error?")
-    //             return res.status(401).json({ message: 'Unauthroized user' });
-    //         } else {
+router.delete('/:menuid', async function(req, res, next) { //used
+
     menu_id = req.params['menuid']
     result = menuModel.deleteMenu(menu_id)
     result.then(([data, meta]) => {
-            res.status(200).json({ message: "success" })
-        }).catch(() => {
-            res.status(500).json({ message: "fail to delete" })
-        })
-        //         }
-        //     })
-        // }
+        res.status(200).json({ message: "success" })
+    }).catch(() => {
+        res.status(500).json({ message: "fail to delete" })
+    })
+
 })
 
 /**
@@ -241,17 +216,8 @@ router.delete('/:menuid', function(req, res, next) { //used
  *     security:
  *       - Secured: []
  */
-router.put('/:menuid', function(req, res, next) {
+router.put('/:menuid', async function(req, res, next) {
 
-
-    // if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
-    //     jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-    //         if (err) {
-    //             console.log("error?")
-    //             return res.status(401).json({ message: 'Unauthorized user' })
-    //         } else {
-    // menu_id = req.params['menuid']
-    console.log(req.body)
     let update_id = req.body['menuid']
     let update_res_id = req.body['restaurant_id']
     let update_menu_name = req.body['menu_name']
@@ -259,14 +225,12 @@ router.put('/:menuid', function(req, res, next) {
     let update_menu_desc = req.body['menu_desc']
     result = menuModel.updateMenu(update_id, update_res_id, update_menu_name, update_menu_amt, update_menu_desc)
     result.then(([data, meta]) => {
-            res.status(200).json({ message: "Success" })
+        res.status(200).json({ message: "Success" })
 
-        }).catch(() => {
-            res.status(400).json({ message: "fail to update" })
-        })
-        //         }
-        //     });
-        // }
+    }).catch(() => {
+        res.status(400).json({ message: "fail to update" })
+    })
+
 
 })
 

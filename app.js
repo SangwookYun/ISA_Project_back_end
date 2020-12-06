@@ -11,9 +11,8 @@ const swaggerUI = require('swagger-ui-express')
 let jwt = require('jsonwebtoken')
 
 
-app.use(bodyParser.urlencoded({ extended: true })) // middleware
-
-app.use(bodyParser.json()) // middleware
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.options('*', cors());
 app.use(cors());
 app.use(express.json({ limit: "100mb" }));
