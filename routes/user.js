@@ -67,8 +67,7 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
             res.status(200).json({
                 token: jwt.sign({
                     username: data[0].userid,
-                    password: data[0].password
-                }, "MYSECRETKEY")
+                }, "KEY")
             })
         } else {
             res.end('password wrong')
