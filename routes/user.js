@@ -6,9 +6,6 @@ const router = express.Router();
 const userModel = require('../model/userModel')
 let jwt = require('jsonwebtoken')
 
-
-
-
 /**
  * @swagger
  * /user/:userid&:userpassword:
@@ -55,7 +52,7 @@ let jwt = require('jsonwebtoken')
 router.get('/:userid&:userpassword', function(req, res, next) { // used
 
     console.log(req.params)
-    
+
     id = req.params['userid']
     console.log(req.params['userpassword'])
     result = userModel.getUser(id)

@@ -6,13 +6,13 @@ function getMenu(id) {
     })
 }
 
-function updateMenu(id, restid, item, amount, desc) { // Need update
+function updateMenu(id, restid, item, amount, desc) {
     return new Promise((resolve, reject) => {
         console.log()
-        console.log('UPDATE menu SET restaurantid = ' + restid+', items = "' + item + '", menudescription = "'+ 
-        desc + '", menuprice = "'+ amount +'" WHERE menuid = '+ id)
-        resolve(db.execute('UPDATE menu SET restaurantid = ' + restid+', items = "' + item + '", menudescription = "'+ 
-        desc + '", menuprice = "'+ amount +'" WHERE menuid = '+ id))
+        console.log('UPDATE menu SET restaurantid = ' + restid + ', items = "' + item + '", menudescription = "' +
+            desc + '", menuprice = "' + amount + '" WHERE menuid = ' + id)
+        resolve(db.execute('UPDATE menu SET restaurantid = ' + restid + ', items = "' + item + '", menudescription = "' +
+            desc + '", menuprice = "' + amount + '" WHERE menuid = ' + id))
     })
 }
 
