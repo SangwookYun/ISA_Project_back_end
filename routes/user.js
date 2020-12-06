@@ -1,10 +1,20 @@
 const { json } = require('body-parser');
 const express = require('express');
+const { JsonWebTokenError } = require('jsonwebtoken');
 const { getMenu } = require('../model/menuModel');
 const router = express.Router();
 const userModel = require('../model/userModel')
+let jwt = require('jsonwebtoken')
+
+
 
 router.get('/:userid&:userpassword', function(req, res, next) {
+
+    if(req.header&& req.header.authorization  && req.headers.authorization.split(' ')[0]==='JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode)=> {
+            console.log(decode)
+        })
+    }
     console.log(req.params)
     id = req.params['userid']
     console.log(req.params['userpassword'])
@@ -14,8 +24,16 @@ router.get('/:userid&:userpassword', function(req, res, next) {
         let id_pwd = JSON.parse(JSON.stringify(data))[0];
         console.log(id_pwd)
         if(id_pwd['password']==req.params['userpassword']) {
-            
-            res.status(200).json(data)
+            console.log(data[0].userid)
+            console.log(data[0].password)
+            // res.status(200).json(data)
+
+            res.status(200).json({token:
+                jwt.sign({
+                    username:data[0].userid,
+                    password:data[0].password
+                }, "MYSECRETKEY")
+            })
         }else {
             res.end('password wrong')
         }

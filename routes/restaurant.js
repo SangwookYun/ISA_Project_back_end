@@ -31,16 +31,28 @@ const resModel = require('../model/restuarantModel')
  *       - Secured: []
  */
 router.get('/:id', function(req, res, next) {
-    // console.log(req)
-    res_id = req.params['id']
-    result = resModel.getRestaurant(res_id)
-    result.then(([data, meta]) => {
-        // console.log(result)
-        console.log(data)
-        res.status(200).json(data)
-    }).catch(() => {
-        res.status(500).json({ message: "fail to get" })
-    });
+    if(req.header&& req.header.authorization  && req.headers.authorization.split(' ')[0]==='JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode)=> {
+            if(err) {
+                return res.status(401).json({message:'Unauthorized user'})
+            }else {
+                  
+                  let user = decode;
+                  console.log(user)
+                  res_id = user['id']
+                // res_id = req.params['id']
+                result = resModel.getRestaurant(res_id)
+                result.then(([data, meta]) => {
+                    // console.log(result)
+                    console.log(data)
+                    res.status(200).json(data)
+                }).catch(() => {
+                    res.status(500).json({ message: "fail to get" })
+                });
+            }
+        })
+    }
+  
 })
 
 /**
