@@ -91,7 +91,7 @@ router.get('/:id', async function(req, res, next) {
 router.post('/', function(req, res, next) {
 
     console.log("not error")
-    console.log(req.body)
+    console.log(req.headers.authorization)
     let new_res_name = req.body['restaurant_name'];
     resModel.getRestaurantByName(new_res_name).then((result) => {
         if (result[0].length == 0) {
