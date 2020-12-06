@@ -88,7 +88,7 @@ router.get('/:id', async function(req, res, next) {
  *     security:
  *       - Secured: []
  */
-router.post('/', async function(req, res, next) {
+router.post('/', function(req, res, next) {
 
     console.log("not error")
     console.log(req.body)
