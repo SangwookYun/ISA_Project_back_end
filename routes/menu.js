@@ -48,15 +48,16 @@ router.post('/rest/:restaurantid', function(req, res, next) { //used // Need upd
         let result_count = result[0];
         result_count = JSON.parse(JSON.stringify(result_count))[0]
         console.log(result_count)
-        let new_idx = (result_count)["COUNT(*)"] + 1;
+        let new_idx = (result_count)["COUNT(*)"] + 2;
         console.log(new_idx);
 
-        menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc'])
-            .then(() => {
-                res.status(200).json({ message: "success" })
-            }).catch(() => {
-                res.status(500).json("failed to add")
-            })
+        menu = menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc'])
+        menu.then((result) => {
+            console.log('success')
+            res.status(200).json({ message: "success" })
+        }).catch(() => {
+            res.status(500).json("failed to add")
+        })
 
     })
 })

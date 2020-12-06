@@ -3,60 +3,60 @@ const router = express.Router();
 const db = require('../db')
 const resModel = require('../model/restuarantModel')
 let jwt = require('jsonwebtoken')
-/**
- * @swagger
- * /restaurant/:id:
- *   get:
- *     tags:
- *       - Restaurant
- *     description: get restaurant
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: id
- *         in: query
- *         require: false
- *         type: string
- *         example: 2
- *     responses:
- *       200:
- *          description:  OK
- *          content:
- *           application/json; charset=utf-8:
- *              example:
- *                  [
- *                   {
- *                      restaurantid: 2,
- *                       restaurant_name: 'Sushi California',
- *                       restaurant_phone: '604-931-8284',
- *                       restaurant_addr: '501 North Rd, Coquitlam',
- *                       restaurant_desc: 'A casual dining sushi restaurant. The best place t'
- *                   }
- *               ]
- *       400:
- *         description: unauthorized
- *       500:
- *         description: fail to get
- *       default:
- *         description: unauthorized
- *     security:
- *       - Secured: []
- */
+    /**
+     * @swagger
+     * /restaurant/:id:
+     *   get:
+     *     tags:
+     *       - Restaurant
+     *     description: get restaurant
+     *     consumes:
+     *       - application/json
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: id
+     *         in: query
+     *         require: false
+     *         type: string
+     *         example: 2
+     *     responses:
+     *       200:
+     *          description:  OK
+     *          content:
+     *           application/json; charset=utf-8:
+     *              example:
+     *                  [
+     *                   {
+     *                      restaurantid: 2,
+     *                       restaurant_name: 'Sushi California',
+     *                       restaurant_phone: '604-931-8284',
+     *                       restaurant_addr: '501 North Rd, Coquitlam',
+     *                       restaurant_desc: 'A casual dining sushi restaurant. The best place t'
+     *                   }
+     *               ]
+     *       400:
+     *         description: unauthorized
+     *       500:
+     *         description: fail to get
+     *       default:
+     *         description: unauthorized
+     *     security:
+     *       - Secured: []
+     */
 router.get('/:id', function(req, res, next) {
 
-    
-    if(req.header&& req.header.authorization  && req.headers.authorization.split(' ')[0]==='JWT') {
-        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode)=> {
-            if(err) {
-                return res.status(401).json({message:'Unauthorized user'})
-            }else {
-                  
-                  let user = decode;
-                  console.log(user)
-                  res_id = user['id']
-                // res_id = req.params['id']
+
+    if (req.header && req.header.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
+        jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
+            if (err) {
+                return res.status(401).json({ message: 'Unauthorized user' })
+            } else {
+
+                let user = decode;
+                console.log(user)
+                res_id = user['id']
+                    // res_id = req.params['id']
                 result = resModel.getRestaurant(res_id)
                 result.then(([data, meta]) => {
                     // console.log(result)
@@ -68,7 +68,7 @@ router.get('/:id', function(req, res, next) {
             }
         })
     }
-  
+
 })
 
 /**
@@ -103,19 +103,13 @@ router.get('/:id', function(req, res, next) {
  *       - Secured: []
  */
 router.post('/', function(req, res, next) { //used
-    
-    console.log("called")
-    console.log(req.body)
-    // console.log(req.headers) //undefined
-    // console.log(req.headers.authorization)
-    // console.log(req.headers.authorization.split(' '))
-    // console.log(req.headers.authorization.split(' ')[0])
+
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
         jwt.verify(req.headers.authorization.split(' ')[1], 'MYSECRETKEY', (err, decode) => {
-            if(err) {
+            if (err) {
                 console.log("error?")
-                return res.status(401).json({message:'Unauthroized user'});
-            }else {
+                return res.status(401).json({ message: 'Unauthroized user' });
+            } else {
                 console.log("not error")
                 console.log(req.body)
                 let new_res_name = req.body['restaurant_name'];
@@ -130,7 +124,7 @@ router.post('/', function(req, res, next) { //used
                             }).catch(() => {
                                 console.log("failed")
                             });
-            
+
                         })
                     }
                 }).catch(() => {
@@ -139,7 +133,7 @@ router.post('/', function(req, res, next) { //used
             }
         })
     }
-    
+
 })
 
 /**
