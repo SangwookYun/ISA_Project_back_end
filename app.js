@@ -20,7 +20,7 @@ app.use(express.json({ limit: "100mb" }));
 app.use('/api/v1/user', user)
 
 app.use((req, res, next) => {
-
+    console.log(req.header.authorization)
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT') {
 
         jwt.verify(req.headers.authorization.split(' ')[1], 'KEY', (err, decode) => {
