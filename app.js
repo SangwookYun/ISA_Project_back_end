@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
 const resModel = require('./model/restuarantModel')
+let jwt = require('jsonwebtoken')
 
 app.use(bodyParser.urlencoded({ extended: true })) // middleware
 
