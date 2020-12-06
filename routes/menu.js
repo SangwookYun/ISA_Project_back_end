@@ -26,11 +26,12 @@ const menuModel = require('../model/menuModel')
  *          description: OK
  *          content:
  *             application/json:
- *              schema:
- *                  type: object
- *                  properties:
- *                      message: 
- *                          type: String 
+ *              example:
+ *                  [
+ *                   {
+ *                      message: Success
+ *                   }
+ *               ]
  *       400:
  *          description: Fail to add 
  *       default:
@@ -51,7 +52,12 @@ router.post('/rest/:restaurantid', function(req, res, next) { //used // Need upd
         console.log(new_idx);
 
         menuModel.addMenuItem(new_idx, req.body['restaurant_id'], req.body['menu_name'], req.body['menu_amount'], req.body['menu_desc'])
-        res.status(200).json("done")
+            .then(() => {
+                res.status(200).json({ message: "success" })
+            }).catch(() => {
+                res.status(500).json("failed to add")
+            })
+
     })
 })
 

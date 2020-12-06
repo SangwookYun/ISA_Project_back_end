@@ -2,9 +2,6 @@ const db = require('../db');
 const { get } = require('../routes/menu');
 
 let getRestaurantAll = () => {
-    // return new Promise((resolve, reject) => {
-    //     resolve(db.execute("SELECT * FROM restaurant"));
-    // });
     return db.execute("SELECT * FROM restaurant")
 }
 
