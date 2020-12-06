@@ -68,7 +68,7 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
 });
 /**
  * @swagger
- * /signup/:userid:
+ * /user/signup/:userid:
  *   post:
  *     tags:
  *       - SignUP
@@ -106,6 +106,7 @@ router.get('/:userid&:userpassword', function(req, res, next) { // used
 router.get('/signup/:userid', function(req, res, next) { // used
     console.log(req.params)
     id = req.params['userid']
+    console.log(id)
     result = userModel.getUser(id)
     result.then(([data, meta]) => {
         console.log(data)
@@ -123,7 +124,7 @@ router.get('/signup/:userid', function(req, res, next) { // used
 });
 /**
  * @swagger
- * /new/signup:
+ * /user/new/signup:
  *   post:
  *     tags:
  *       - SignUP
