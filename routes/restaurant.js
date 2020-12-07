@@ -156,48 +156,48 @@ router.delete('/:id', async function(req, res, next) { //used
 
 })
 
-/**
- * @swagger
- * /restaurant/:id:
- *   put:
- *     tags:
- *       - Restaurant
- *     description: Update restaurant STILL NEED WORK
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     parameters:
- *       - in: query
- *         name: id
- *         required: false
- *         schema:
- *           $ref: []
- *         examples:
- *         application/json: 1
- *     responses:
- *       '201':
- *         description: Success
- *       500:
- *          description: Unable to update
- *       default:
- *         description: Unexpected Error
- *     security:
- *       - Secured: []
- */
-router.put('/:id', async function(req, res, next) {
+// /**
+//  * @swagger
+//  * /restaurant/:id:
+//  *   put:
+//  *     tags:
+//  *       - Restaurant
+//  *     description: Update restaurant STILL NEED WORK
+//  *     consumes:
+//  *       - application/json
+//  *     produces:
+//  *       - application/json
+//  *     parameters:
+//  *       - in: query
+//  *         name: id
+//  *         required: false
+//  *         schema:
+//  *           $ref: []
+//  *         examples:
+//  *         application/json: 1
+//  *     responses:
+//  *       '201':
+//  *         description: Success
+//  *       500:
+//  *          description: Unable to update
+//  *       default:
+//  *         description: Unexpected Error
+//  *     security:
+//  *       - Secured: []
+//  */
+// router.put('/:id', async function(req, res, next) {
 
-    let res_id = req.params['id']
-    result = resModel.updateRestaurant(res_id)
-    result.then(() => {
-        res.status(200).json(result)
-    }).catch(() => {
-        res.status(500).json({
-            "message": "fail to update"
-        })
-    })
+//     let res_id = req.params['id']
+//     result = resModel.updateRestaurant(res_id)
+//     result.then(() => {
+//         res.status(200).json(result)
+//     }).catch(() => {
+//         res.status(500).json({
+//             "message": "fail to update"
+//         })
+//     })
 
-})
+// })
 
 
 

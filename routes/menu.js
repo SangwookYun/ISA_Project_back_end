@@ -204,7 +204,7 @@ router.delete('/:menuid', async function(req, res, next) { //used
  *              example:
  *                  [
  *                   {
- *                      message: Success
+ *                      message: Success,
  *                   }
  *               ]
  *       400:
